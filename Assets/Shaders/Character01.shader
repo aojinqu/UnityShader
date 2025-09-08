@@ -16,7 +16,7 @@ Shader "Unlit/Character"
     SubShader
     {
         Tags { "Queue"="Geometry" }
-        LOD 100
+        LOD 600
         ZTest [_ZTest]
         Cull back
         Blend Off
@@ -102,10 +102,10 @@ Shader "Unlit/Character"
             }
             ENDCG
         }
-        
+
         Pass
         {
-        
+
             Tags{"LightMode"="ShadowCaster"} //写光照shader一定要把前向渲染路径写明白！！！！
             CGPROGRAM
             #pragma vertex vert
@@ -152,14 +152,28 @@ Shader "Unlit/Character"
                 fixed4 dissolve = tex2D(_DissolveTex, i.uv); // 使用预先计算的dissolveUV
                 clip(dissolve.r-_Clip);
                 #endif
+                //添加"LightMode" = "ShadowCaster"的Pass.
+                //1.appdata中声明float4 vertex:POSITION;和half3 normal:NORMAL;这是生成阴影所需要的语义.
+                //2.v2f中添加V2F_SHADOW_CASTER;用于声明需要传送到片断的数据.
+                //3.在顶点着色器中添加TRANSFER_SHADOW_CASTER_NORMALOFFSET(o)，主要是计算阴影的偏移以解决不正确的Shadow Acne和Peter Panning现象.
+                //4.在片断着色器中添加SHADOW_CASTER_FRAGMENT(i)                       
                 SHADOW_CASTER_FRAGMENT(i);  
             }
             ENDCG
-            //添加"LightMode" = "ShadowCaster"的Pass.
-            //1.appdata中声明float4 vertex:POSITION;和half3 normal:NORMAL;这是生成阴影所需要的语义.
-            //2.v2f中添加V2F_SHADOW_CASTER;用于声明需要传送到片断的数据.
-            //3.在顶点着色器中添加TRANSFER_SHADOW_CASTER_NORMALOFFSET(o)，主要是计算阴影的偏移以解决不正确的Shadow Acne和Peter Panning现象.
-            //4.在片断着色器中添加SHADOW_CASTER_FRAGMENT(i)       
+
         }
+
     }
+
+    SubShader
+    {
+        LOD 400 
+        Pass
+        {
+        
+        
+        } 
+    }
+        //Fallback应该放在所有Pass定义之后，SubShader之外
+        //Fallback "Legacy Shaders/VertexLit" 
 }

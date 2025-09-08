@@ -1,0 +1,41 @@
+# 忽略所有文件
+*
+
+# 但保留这些目录和文件
+!Assets/
+!Notes/
+
+# 确保.gitignore本身不被忽略
+!.gitignore
+
+# 额外确保这些目录下的内容不被忽略
+!Assets/**
+!Notes/**
+
+# 忽略Unity生成的文件
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# 忽略项目文件
+/*.csproj
+/*.sln
+/*.suo
+/*.user
+/*.userprefs
+
+# 忽略VS Code设置
+.vscode/
+
+# 忽略包目录（通常通过包管理器恢复）
+/[Pp]ackages/
+
+# 忽略自动生成的文件
+AssetStoreTools/
+
+# 忽略macOS系统文件
+.DS_Store
