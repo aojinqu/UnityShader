@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x7f51;&#x683c;&#x9634;&#x5f71;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="网格阴影">网格阴影</h1>
+<h3 id="需求分析">需求分析</h3>
+<p><img src="file:///e:\test\unity\0903\Notes\images\MeshShadow-3.png" alt="meshshadow-3"></p>
+<ul>
+<li><strong>实现原理</strong>：将角色模型沿世界空间Y轴压缩成面片，赋予固定颜色后移动到角色脚底位置</li>
+<li><strong>偏移处理</strong>：在XZ平面移动阴影面片时，根据顶点Y轴高度进行动态偏移（脚底偏移量最小，高处偏移量最大）</li>
+<li><strong>数学关系</strong>：偏移量 = 基础偏移 × y_height，实现阴影随高度变化的渐变效果</li>
+</ul>
+<p><img src="file:///e:\test\unity\0903\Notes\images\MeshShadow-4.png" alt="meshshadow-4"></p>
+<h4 id="实现效果">实现效果</h4>
+<p><img src="file:///e:\test\unity\0903\Notes\images\MeshShadow-2.png" alt="meshshadow-2"></p>
+<h3 id="qa">Q&amp;A</h3>
+<ol>
+<li><strong>MVP矩阵是什么?</strong></li>
+</ol>
+<p>本地坐标 → (× M矩阵) → 世界坐标 → (× V矩阵) → 观察坐标 → (× P矩阵) → 裁剪坐标
+<img src="file:///e:\test\unity\0903\Notes\images\MeshShadow-5.png" alt="meshshadow-5"></p>
+<pre><code class="language-C#"><span class="hljs-function">v2f <span class="hljs-title">vert</span>(<span class="hljs-params">appdata v</span>)</span> 
+{
+  v2f o;
+  float4 worldPos=mul(,unity_ObjectToWorld,v.vertex);<span class="hljs-comment">//顶点空间变换到世界</span>
+  o.pos=mul(UNITY_MATRIX_VP,worldPos);<span class="hljs-comment">//世界空间变换到裁剪空间</span>
+  <span class="hljs-comment">//o.pos = UnityObjectToClipPos(v.vertex);// 这内部其实就是 MVP * v.vertex    // 等同于：mul(UNITY_MATRIX_VP, mul(unity_ObjectToWorld, v.vertex));</span>
+  <span class="hljs-keyword">return</span> o;
+}
+</code></pre>
+<p><strong>之后发生了什么？（透视除法和视口变换）</strong></p>
+<ol>
+<li>透视除法（Perspective Divide）：</li>
+</ol>
+<ul>
+<li>由GPU自动完成。</li>
+<li>将裁剪坐标的各个分量（x, y, z）同时除以它的w分量（ homogeneous coordinate）。</li>
+<li>结果是一个标准化设备坐标（Normalized Device Coordinates, NDC），其x, y, z坐标都在[-1, 1]的范围内。</li>
+</ul>
+<ol start="2">
+<li>视口变换（Viewport Transform）：</li>
+</ol>
+<ul>
+<li>同样由GPU自动完成。</li>
+<li>将NDC坐标映射到最终的屏幕坐标（Screen Space）（即你的窗口或屏幕的像素位置）。</li>
+</ul>
+<ol start="2">
+<li>为什么用模板测试来解决阴影的问题，而不是直接写ZTEST LESS？
+<img src="file:///e:\test\unity\0903\Notes\images\MeshShadow-1.png" alt="meshshadow-1"></li>
+</ol>
+<p>非常好的问题！如果只用 ZTest Less，阴影在角色脚部的那些像素会因为深度值与角色太接近而无法通过深度测试（不是更近），或者产生深度冲突导致闪烁。</p>
+<p>这涉及到渲染管线中模板测试（Stencil Test） 和深度测试（ZTest/Depth Test） 的根本区别。</p>
+<p>简单来说，它们的核心区别是：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>模板测试 (Stencil Test)</th>
+<th>深度测试 (ZTest/Depth Test)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目的</td>
+<td>标记像素，基于用户定义的逻辑</td>
+<td>判断远近关系，基于深度缓冲区的值</td>
+</tr>
+<tr>
+<td>数据</td>
+<td>8位整数（0-255）的模板缓冲区</td>
+<td>24/32位浮点数的深度缓冲区</td>
+</tr>
+<tr>
+<td>应用</td>
+<td>特效、遮罩、轮廓、复杂裁剪</td>
+<td>物体遮挡、前后排序</td>
+</tr>
+</tbody>
+</table>
+<p>解决方案的核心是：<strong>让阴影不要绘制在它所属的物体本身上</strong>。</p>
+<p><strong>总结</strong></p>
+<p>ZTest（深度测试） 解决的是 “谁在前，谁在后” 的几何空间问题。</p>
+<p>Stencil（模板测试） 解决的是 “哪里能画，哪里不能画” 的逻辑标记问题。</p>
+<p>对于阴影渲染中的自阴影冲突这个特定问题，它是一个逻辑问题（“不要画在自己身上”），而不是一个几何问题（“谁更近”）。因此，使用模板测试来基于逻辑规则接受或拒绝像素，是比依赖深度值的深度测试更精确、更可靠的解决方案。</p>
+<pre><code class="language-C#">Stencil
+{
+    Ref <span class="hljs-number">100</span> <span class="hljs-comment">// 定义一个参考值 100</span>
+    Comp NotEqual <span class="hljs-comment">// 【模板测试条件】：只有当模板缓冲区中的值 ≠ 100 时，才通过测试</span>
+    Pass Replace <span class="hljs-comment">// 【模板操作】：如果深度测试和模板测试都通过了，则将参考值 100 写入模板缓冲区</span>
+}
+</code></pre>
+
+            
+            
+        </body>
+        </html>

@@ -12,6 +12,8 @@ Shader "Unlit/Character"
         _RampTex ("RampTexture", 2D) = "white" {}
         _Color("Color",Color) = (0,0,0,0)  //默认黑色
         _Clip("Clip",Range(0,1)) = 0
+        [Header(Shadow)]
+        _Shadow("Offset(XZ),Height(Y),Alpha(W)", vector) =(0,0.8,0,0)
     }
     SubShader
     {
@@ -167,12 +169,110 @@ Shader "Unlit/Character"
 
     SubShader
     {
+        //需要让阴影和地面颜色混合。所以使用半透明的混合模式
+        Blend SrcAlpha OneMinusSrcAlpha
         LOD 400 
+        
+        Stencil
+        {
+            Ref 100
+            Comp NOTEQUAL
+            Pass Replace
+        }
         Pass
         {
-        
-        
-        } 
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile _ _DISSOLVEENABLED_ON
+
+            #include "UnityCG.cginc"
+
+            sampler2D _MainTex;
+            sampler2D _DissolveTex;
+            sampler _RampTex;
+            float4 _MainTex_ST;
+            float4 _DissolveTex_ST;
+            float4 _Color;
+            fixed _Clip; //不能设置为float4，它只是一个小数而已
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float4 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float4 uv : TEXCOORD0;
+                float4 pos : SV_POSITION;
+
+            };
+
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.uv.xy = v.uv.xy;
+                
+                o.uv.zw = TRANSFORM_TEX(v.uv, _DissolveTex); // 新增
+                return o;
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            {                                
+                fixed4 c;
+                // sample the texture
+                fixed4 tex = tex2D(_MainTex, i.uv);
+                c=tex;
+
+                //利用变体，节省时间
+                #if _DISSOLVEENABLED_ON
+                fixed4 dissolve = tex2D(_DissolveTex, i.uv.zw); // 使用预先计算的dissolveUV
+                c += _Color;
+                clip(dissolve.r-_Clip);
+                float4 ramp = tex1D(_RampTex, smoothstep(_Clip,_Clip+0.1,dissolve.r));
+                c += ramp;
+                #endif
+                return c;
+            }
+            ENDCG
+        }
+        Pass
+        {
+           CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+            float4 _Shadow;
+            struct appdata
+            {
+                float4 vertex:POSITION;
+            };
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+            };
+            v2f vert(appdata v) 
+            {
+                v2f o;                
+                float4 worldPos=mul(unity_ObjectToWorld,v.vertex);//顶点空间变换到世界
+                float worldPosY=worldPos.y;
+                worldPos.y=_Shadow.y;
+                worldPos.xz+=_Shadow.xz*(worldPosY-_Shadow.y);
+                o.pos=mul(UNITY_MATRIX_VP,worldPos);//世界空间变换到裁剪空间
+                //o.pos = UnityObjectToClipPos(v.vertex);
+                return o;
+            }
+            fixed4 frag(v2f i):SV_Target
+            {
+                fixed4 c=0;
+                c.a = _Shadow.w;
+                return c;
+            }
+
+            ENDCG
+        }
     }
         //Fallback应该放在所有Pass定义之后，SubShader之外
         //Fallback "Legacy Shaders/VertexLit" 
