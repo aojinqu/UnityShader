@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/GI.unity
+- path: Assets/Scenes/Texture.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

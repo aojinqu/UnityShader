@@ -78,6 +78,7 @@
     <None Include="Assets\Shaders\framework.shader" />
     <None Include="Assets\Shaders\Properties.shader" />
     <None Include="Assets\Shaders\CGIncludes\MYGI.cginc" />
+    <None Include="Assets\Shaders\Fog.shader" />
     <None Include="Assets\Arts\Shaders\CharacterUnlit.shader" />
     <None Include="Assets\Shaders\Character01.shader" />
     <None Include="Assets\Shaders\Globalillumination.shader" />
@@ -87,9 +88,11 @@
     <None Include="Assets\Shaders\effect.shader" />
     <None Include="Assets\Arts\Shaders\FrameWork.shader" />
     <None Include="Assets\Shaders\UIGray.shader" />
+    <None Include="Assets\Shaders\TexureTutorial.shader" />
     <None Include="Assets\Arts\Shaders\CGIncludes\MyGlobalIllumination.cginc" />
     <None Include="Assets\Shaders\LightModel.shader" />
     <None Include="Assets\Shaders\plane.shader" />
+    <None Include="Assets\Shaders\outline.shader" />
     <None Include="Assets\Shaders\heatDistort.shader" />
   </ItemGroup>
   <ItemGroup>
