@@ -1,4 +1,4 @@
-Shader "Aj7/Texuretutiol"
+Shader "aj7/Texuretutorial"
 {
     Properties
     {

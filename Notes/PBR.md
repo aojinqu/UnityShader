@@ -18,3 +18,16 @@
 
 
 ### 双向反射分布函数BRDF
+  ![BRDF-1](./images/BRDF-.png)
+
+
+实操
+做PBR之前先转移到线性空间
+
+  ![BRDF-2](./images/BRDF-2.png)
+
+  ![BRDF-3](./images/BRDF-3.png)
+
+由于上图的原因，Linear空间下会自动对sRGB做解码操作，先移除gamma校正，使用完数据后重新gamma校正。所以对于线性空间下的贴图需要实现勾选下图中的sRBG才能获得正确的结果
+
+  ![BRDF-4](./images/BRDF-4.png)

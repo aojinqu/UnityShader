@@ -1,6 +1,6 @@
 // Upgrade NOTE: replaced 'defined defined' with 'defined (defined)'
 
-Shader "Unlit/Globalillumination"
+Shader "aj7/Globalillumination"
 {
     Properties
     {
@@ -45,8 +45,8 @@ Shader "Unlit/Globalillumination"
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex); // 将物体空间的顶点位置转换到裁剪空间
-                o.worldPos = mul(unity_ObjectToWorld, v.vertex); // 将物体空间的顶点位置转换到世界空间
+                o.vertex = UnityObjectToClipPos(v.vertex); 
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex); 
                 o.worldNormal = UnityObjectToWorldNormal(v.normal); // 将物体空间的法线转换到世界空间
                 #if defined(LIGHTMAP_ON) 
                 o.lightmapUV.xy = v.texcoord1 * unity_LightmapST.xy + unity_LightmapST.zw; // 计算光照贴图的UV坐标

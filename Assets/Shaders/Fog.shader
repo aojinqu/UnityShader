@@ -1,4 +1,4 @@
-Shader "Aj7/Fog"
+Shader "aj7/Fog"
 {
     Properties
     {

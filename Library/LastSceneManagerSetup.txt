@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/Texture.unity
+- path: Assets/Scenes/PBRScene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

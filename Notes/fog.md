@@ -39,7 +39,7 @@ $$ fogFactor=e^{-(density·z)^2}$$
 ## 打开雾效
 网上unity雾效教程说勾选 Windows->Rendering->LightingSettings->OtherSettings->Fog 即可开启unity 默认雾效，但unity更新后，需要在Windows->Rendering->LightingSettings->Environment->OtherSettings->Fog 中才能找到
 
-![fog-1](./images/fog-1.png)
+![fog-1](./images/Fog-1.png)
 
 ## 实现方法
 需要实现远处的物体颜色与雾色集合，变得模糊。

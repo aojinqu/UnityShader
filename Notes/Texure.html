@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x7eb9;&#x7406;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="纹理">纹理</h1>
+<p><strong>复习渲染管线的各个阶段</strong></p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Tex-1.png" alt="Tex-1"></p>
+<h2 id="多级渐远mipmap">多级渐远Mipmap</h2>
+<p><strong>工作原理</strong>: 可以理解为纹理的LOD，根据视角远近加载不同精度的贴图，近处用大图，远处用小图
+<img src="file:///e:\test\unity\0903\Notes\images\Tex-2.png" alt="Tex-1"></p>
+<p>优点：1.解决摩尔纹问题。2.配合质量设置来分级加载，减少不同配置下的内存</p>
+<p>缺点：现存增加30%</p>
+<pre><code class="language-C">fixed4 <span class="hljs-title function_">frag</span> <span class="hljs-params">(v2f i)</span> : SV_Target
+{
+    float4 mipMapUV= float4(i.uv,<span class="hljs-number">0</span>,_Mipmap);
+    <span class="hljs-comment">//第二个参数为float4类型，xy为uv坐标，z为0，w为mipmap等级</span>
+    fixed4 c = tex2Dlod(_MainTex, mipMapUV);
+    <span class="hljs-keyword">return</span> c;
+}
+</code></pre>
+<h2 id="过滤">过滤</h2>
+<p>在真正贴纹理之前需要过滤。</p>
+<p><strong>核心问题</strong>: 纹理纹素与屏幕像素不存在一一对应关系</p>
+<p><strong>具体表现</strong>:</p>
+<ul>
+<li>显示器分辨率（如1920×1080）与贴图分辨率（如512×512）不同</li>
+<li><strong>屏幕像素可能覆盖纹理上的单个或多个纹素</strong></li>
+<li>纹理可自由缩放导致对应关系动态变化</li>
+</ul>
+<p>因此通过过滤算法确定像素最终显示颜色</p>
+<h3 id="过滤方法">过滤方法</h3>
+<ol>
+<li>点过滤</li>
+</ol>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Tex-3.png" alt="Tex-3"></p>
+<p>采样原理: 直接取离采样点最近的单个纹素值</p>
+<p>示例说明:
+当屏幕像素（加号标记）落在4个纹素组成的区域时，仅采用最近纹素（左下角红色）的颜色值，完全忽略其他相邻纹素的影响</p>
+<p>特点: 会产生明显锯齿，但计算量最小</p>
+<ol start="2">
+<li>双线性过滤</li>
+</ol>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Tex-4.png" alt="Tex-4"></p>
+<p>采样方式: 采集采样点周围4个纹素进行加权平均</p>
+<p>权重规则:
+距离采样点越近的纹素权重越高，通过插值计算最终颜色值</p>
+<ol start="2">
+<li>三线性过滤</li>
+</ol>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Tex-5.png" alt="Tex-5"></p>
+<p>增强特性: 在双线性过滤基础上增加Mipmap层级过渡处理</p>
+<p>采样复杂度:
+需要采样8个纹素（相邻Mipmap级别的各4个）
+进行三维插值计算（空间XY方向+Mipmap层级）</p>
+<p>适用场景: 特别适合处理动态LOD变化的纹理渲染</p>
+<p>总结:以上三种颜色过渡的效果从差到好，性能开销从低到高。</p>
+<pre><code class="language-C#"><span class="hljs-function">fixed4 <span class="hljs-title">frag</span> (<span class="hljs-params">v2f i</span>) : SV_Target</span>
+{
+    <span class="hljs-meta">#ifdef _WRAPMODE_REPEAT</span>
+        <span class="hljs-comment">//重复模式。取uv的小数部分即可</span>
+        i.uv = frac(i.uv);
+    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+    <span class="hljs-meta">#ifdef _WRAPMODE_CLAMP</span>
+        <span class="hljs-comment">//夹紧模式。取uv的0-1范围</span>
+        i.uv = clamp(i.uv,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>);
+    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+    float4 mipMapUV= float4(i.uv,<span class="hljs-number">0</span>,_Mipmap);
+    <span class="hljs-comment">//tex2Dlod函数可以指定mipmap等级采样贴图            </span>
+    <span class="hljs-comment">//第二个参数为float4类型，xy为uv坐标，z为0，w为mipmap等级</span>
+    fixed4 c = tex2Dlod(_MainTex, mipMapUV);
+    <span class="hljs-keyword">return</span> c;
+}
+</code></pre>
+<h3 id="cubemap">CubeMap</h3>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Tex-6.png" alt="Tex-6"></p>
+<pre><code class="language-C#">samplerCUBE _CubeMap;
+...
+
+<span class="hljs-comment">//Cube采样,关键是用什么uv来采样？答案是本地空间坐标.下一步则是使用视线反射来做环境映射</span>
+fixed4 cubemap=texCUBE(_CubeMap,i.localPos);
+
+<span class="hljs-comment">//环境映射</span>
+<span class="hljs-comment">//V,N,R</span>
+fixed3 V= UnityWorldSpaceViewDir(i.worldlPos);
+fixed3 N=normalize(i.normal);
+fixed3 R=reflect(-V,N);
+<span class="hljs-comment">//Cube采样,关键是用什么uv来采样？答案是本地空间</span>
+cubemap=texCUBE(_CubeMap,R);                
+<span class="hljs-keyword">return</span> cubemap;
+</code></pre>
+<h2 id="法线贴图">法线贴图</h2>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Tex-7.png" alt="Tex-7"></p>
+<h2 id="法线空间">法线空间</h2>
+<p>定义：以顶点为原点构建的独立坐标空间，既非本地空间也非世界空间</p>
+<p>构成要素：</p>
+<ul>
+<li>X轴：顶点切线(Tangent)</li>
+<li>Y轴：顶点副切线(BiTangent)，又称副法线(BiNormal)</li>
+<li>Z轴：顶点法线(Normal)</li>
+<li>矩阵表示：由切线(T)、副切线(B)、法线(N)组成的TBN矩阵</li>
+</ul>
+<p>（法线可以由法线贴图得到，切线可以由法线贴图的uv得到，因此我们的问题是如何得到B）</p>
+<p>统一在世界空间下计算时，需将法线贴图数据转换到世界坐标系。</p>
+<p>公式如下：
+核心公式：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>m</mi><mo separator="true">⋅</mo><msub><mi>n</mi><mi>w</mi></msub><mo>=</mo><msub><mi>n</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">m · n_w =n_t 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5945em;vertical-align:-0.15em;"></span><span class="mord mathnormal">m</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<ul>
+<li>m ：切线空间变换矩阵</li>
+<li>n_w ：世界空间法线</li>
+<li>n_t ：切线空间法线（来自法线贴图）</li>
+</ul>
+<p>又因为m是正交矩阵</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>m</mi><mo separator="true">⋅</mo><msup><mi>m</mi><mi>T</mi></msup><mo>=</mo><mi>E</mi></mrow><annotation encoding="application/x-tex">m · m^T =E 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8913em;"></span><span class="mord mathnormal">m</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span></span></span></span></span></p>
+<p>所以</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>n</mi><mi>w</mi></msub><mo>=</mo><msup><mi>m</mi><mi>T</mi></msup><mo separator="true">⋅</mo><msup><mi>n</mi><mi>t</mi></msup></mrow><annotation encoding="application/x-tex">n_w= m^T ·n^t 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8913em;"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8436em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Tex-8.png" alt="Tex-8"></p>
+<p>具体实现见shader大全。
+做完切线空间后，就可以把法线贴图应用于所有物体上了</p>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+            
+        </body>
+        </html>
