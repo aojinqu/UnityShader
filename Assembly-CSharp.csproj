@@ -80,6 +80,7 @@
     <None Include="Assets\Shaders\CGIncludes\MYGI.cginc" />
     <None Include="Assets\Shaders\Fog.shader" />
     <None Include="Assets\Arts\Shaders\CharacterUnlit.shader" />
+    <None Include="Assets\Shaders\CGIncludes\MYPBR.cginc" />
     <None Include="Assets\Shaders\Character01.shader" />
     <None Include="Assets\Shaders\Globalillumination.shader" />
     <None Include="Assets\Shaders\XRay.shader" />
