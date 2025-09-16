@@ -357,12 +357,13 @@
 "Assets/Scripts/GPUInstancing.cs"
 "Assets/Scripts/MaterialPropertyBlockTest.cs"
 "Assets/Scripts/MonsterShaderTest.cs"
+"Assets/Scripts/MyCPU.cs"
 "Assets/Scripts/MyFirstScript.cs"
 "Assets/Scripts/MyMath.cs"
+"Assets/Scripts/MyMonsterShader.cs"
 "Assets/Scripts/MyMonsterShaderTest.cs"
 "Assets/Scripts/ShaderLOD.cs"
 "Assets/Scripts/ShowTBN.cs"
-"Assets/Scripts/Test.cs"
 -langversion:9.0
 /deterministic
 /optimize+

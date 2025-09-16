@@ -4,14 +4,16 @@ Shader "Unlit/Character"
     {
         [Header(Base)]
         _MainTex ("Main Texture", 2D) = "white" {}
+
         [Enum(UnityEngine.Rendering.CompareFunction)]_ZTest ("ZTest", int) = 0
         [Header(Dissolve)]
         [Toggle]_DissolveEnabled("Dissolve Enabled", Int) = 0
         _DissolveTex ("DissolveTexture", 2D) = "white" {}
+        _Clip("Clip",Range(0,1)) = 0
+        _Color("Color",Color) = (0,0,0,0)  //默认黑色
+
         [Header(Ramp)]
         _RampTex ("RampTexture", 2D) = "white" {}
-        _Color("Color",Color) = (0,0,0,0)  //默认黑色
-        _Clip("Clip",Range(0,1)) = 0
         [Header(Shadow)]
         _Shadow("Offset(XZ),Height(Y),Alpha(W)", vector) =(0,0.8,0,0)
     }
@@ -22,6 +24,7 @@ Shader "Unlit/Character"
         ZTest [_ZTest]
         Cull back
         Blend Off
+
 
         UsePass "aj7/XRay/XRay"
         
@@ -95,8 +98,11 @@ Shader "Unlit/Character"
                 fixed4 dissolve = tex2D(_DissolveTex, i.uv.zw); // 使用预先计算的dissolveUV
                 c += _Color;
                 clip(dissolve.r-_Clip);
-                float4 ramp = tex1D(_RampTex, smoothstep(_Clip,_Clip+0.1,dissolve.r));
-                c += ramp;
+                if(_Clip>0)
+                {
+                    float4 ramp = tex1D(_RampTex, smoothstep(_Clip,_Clip+0.1,dissolve.r));
+                    c += ramp;
+                }
                 #endif
                 
 
@@ -231,8 +237,11 @@ Shader "Unlit/Character"
                 fixed4 dissolve = tex2D(_DissolveTex, i.uv.zw); // 使用预先计算的dissolveUV
                 c += _Color;
                 clip(dissolve.r-_Clip);
-                float4 ramp = tex1D(_RampTex, smoothstep(_Clip,_Clip+0.1,dissolve.r));
-                c += ramp;
+                if(_Clip>0)
+                {
+                    float4 ramp = tex1D(_RampTex, smoothstep(_Clip,_Clip+0.1,dissolve.r));
+                    c += ramp;
+                }
                 #endif
                 return c;
             }

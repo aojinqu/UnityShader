@@ -19,7 +19,7 @@
 
 创建变体收集器可以把需要的变体在程序启动时就warmup，会增大native的内存，但对实时内存友好
 
-  ![Complex-2](./images/Complex-2.png)
+  ![Complex2](./images/Complex-2.png)
 
 可以在settings中把程序不会使用到的变体开关关闭
   ![Complex-3](./images/Complex-3.png)

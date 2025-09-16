@@ -69,11 +69,12 @@
     <Compile Include="Assets\Scripts\MonsterShaderTest.cs" />
     <Compile Include="Assets\Scripts\ShaderLOD.cs" />
     <Compile Include="Assets\Scripts\MyFirstScript.cs" />
+    <Compile Include="Assets\Scripts\MyMonsterShader.cs" />
+    <Compile Include="Assets\Scripts\MyCPU.cs" />
     <Compile Include="Assets\Scripts\ShowTBN.cs" />
     <Compile Include="Assets\Scripts\FunctionTest.cs" />
     <Compile Include="Assets\Scripts\MyMonsterShaderTest.cs" />
     <Compile Include="Assets\Scripts\MaterialPropertyBlockTest.cs" />
-    <Compile Include="Assets\Scripts\Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\framework.shader" />
@@ -91,6 +92,7 @@
     <None Include="Assets\Shaders\effect.shader" />
     <None Include="Assets\Arts\Shaders\FrameWork.shader" />
     <None Include="Assets\Shaders\UIGray.shader" />
+    <None Include="Assets\Shaders\Trees.shader" />
     <None Include="Assets\Shaders\TexureTutorial.shader" />
     <None Include="Assets\Arts\Shaders\CGIncludes\MyGlobalIllumination.cginc" />
     <None Include="Assets\Shaders\LightModel.shader" />
