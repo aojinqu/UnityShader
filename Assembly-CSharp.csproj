@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\FunctionTest.cs" />
     <Compile Include="Assets\Scripts\MyMonsterShaderTest.cs" />
     <Compile Include="Assets\Scripts\MaterialPropertyBlockTest.cs" />
+    <Compile Include="Assets\Scripts\Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\framework.shader" />

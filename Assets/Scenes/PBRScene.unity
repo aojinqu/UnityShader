@@ -36,7 +36,7 @@ RenderSettings:
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
-  m_CustomReflection: {fileID: 0}
+  m_CustomReflection: {fileID: 8900000, guid: e1fcac544cff11a40a1c686e9d2f5eec, type: 3}
   m_Sun: {fileID: 0}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -135,6 +135,10 @@ PrefabInstance:
       value: Vela_Template
       objectReference: {fileID: 0}
     - target: {fileID: 8914200720539581282, guid: 704195f872f4c4375a3334991f06c571, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8914200720539581282, guid: 704195f872f4c4375a3334991f06c571, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -148,7 +152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8914200720539739970, guid: 704195f872f4c4375a3334991f06c571, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.138
       objectReference: {fileID: 0}
     - target: {fileID: 8914200720539739970, guid: 704195f872f4c4375a3334991f06c571, type: 3}
       propertyPath: m_LocalRotation.w
@@ -212,7 +216,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.31
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -270,13 +274,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 965333672}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 4.414, z: 0}
+  m_LocalRotation: {x: 0.5303164, y: -0.24462813, z: 0.16314667, w: 0.79517597}
+  m_LocalPosition: {x: -1.25, y: 4.414, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 67.4, y: -34.2, z: 0}
 --- !u!1 &1021442006
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,6 +462,8 @@ GameObject:
   - component: {fileID: 2085879424}
   - component: {fileID: 2085879423}
   - component: {fileID: 2085879422}
+  - component: {fileID: 2085879425}
+  - component: {fileID: 2085879426}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -539,6 +545,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2085879425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085879421}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb5820187718d481986c6672d9e1c0e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  theQuality: 0
+--- !u!114 &2085879426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085879421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76a8317192eb38849a721d55d4b0fc73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

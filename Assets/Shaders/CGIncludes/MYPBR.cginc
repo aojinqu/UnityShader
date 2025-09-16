@@ -2,6 +2,66 @@
 #define MYPHYSICALLYBASESRENDERINGCGINC
 #endif
 
+//F项的计算
+inline half3 FresnelTerm1 (half3 F0, half cosA)
+{
+    half t = Pow5 (1 - cosA);   // ala Schlick interpoliation
+    return F0 + (1-F0) * t;
+}
+inline half3 FresnelLerp1 (half3 F0, half3 F90, half cosA)
+{
+    half t = Pow5 (1 - cosA);   // ala Schlick interpoliation
+    return lerp (F0, F90, t);
+}
+
+
+
+//V项的计算
+// Ref: http://jcgt.org/published/0003/02/03/paper.pdf
+inline float SmithJointGGXVisibilityTerm1 (float NdotL, float NdotV, float roughness)
+{
+#if 0
+    // Original formulation:
+    //  lambda_v    = (-1 + sqrt(a2 * (1 - NdotL2) / NdotL2 + 1)) * 0.5f;
+    //  lambda_l    = (-1 + sqrt(a2 * (1 - NdotV2) / NdotV2 + 1)) * 0.5f;
+    //  G           = 1 / (1 + lambda_v + lambda_l);
+
+    // Reorder code to be more optimal
+    half a          = roughness;
+    half a2         = a * a;
+
+    half lambdaV    = NdotL * sqrt((-NdotV * a2 + NdotV) * NdotV + a2);
+    half lambdaL    = NdotV * sqrt((-NdotL * a2 + NdotL) * NdotL + a2);
+
+    // Simplify visibility term: (2.0f * NdotL * NdotV) /  ((4.0f * NdotL * NdotV) * (lambda_v + lambda_l + 1e-5f));
+    return 0.5f / (lambdaV + lambdaL + 1e-5f);  // This function is not intended to be running on Mobile,
+                                                // therefore epsilon is smaller than can be represented by half
+#else
+    //上面公式的近似实现，数学上不精确但效果接近
+    // Approximation of the above formulation (simplify the sqrt, not mathematically correct but close enough)
+    float a = roughness;
+    float lambdaV = NdotL * (NdotV * (1 - a) + a);
+    float lambdaL = NdotV * (NdotL * (1 - a) + a);
+
+#if defined(SHADER_API_SWITCH)
+    return 0.5f / (lambdaV + lambdaL + UNITY_HALF_MIN);
+#else
+    return 0.5f / (lambdaV + lambdaL + 1e-5f);
+#endif
+
+#endif
+}
+
+//算DDX的D项
+inline float GGXTerm1 (float NdotH, float roughness)
+{
+    float a2 = roughness * roughness;
+    float d = (NdotH * a2 - NdotH) * NdotH + 1.0f; // 2 mad
+    return UNITY_INV_PI * a2 / (d * d + 1e-7f); // This function is not intended to be running on Mobile,
+                                            // therefore epsilon is smaller than what can be represented by half
+}
+
+
 inline float3 Unity_SafeNormalize1(float3 inVec)
 {
         //max用于放负值
@@ -65,26 +125,28 @@ half4 BRDF1_Unity_PBS1 (half3 diffColor, half3 specColor, half oneMinusReflectiv
     // HACK: theoretically we should divide diffuseTerm by Pi and not multiply specularTerm!
     // BUT 1) that will make shader look significantly darker than Legacy ones
     // and 2) on engine side "Non-important" lights have to be divided by Pi too in cases when they are injected into ambient SH
+    //roughness的平方
     float roughness = PerceptualRoughnessToRoughness(perceptualRoughness);
 #if UNITY_BRDF_GGX
     // GGX with roughtness to 0 would mean no specular at all, using max(roughness, 0.002) here to match HDrenderloop roughtness remapping.
     roughness = max(roughness, 0.002);
-    float V = SmithJointGGXVisibilityTerm (nl, nv, roughness);
-    float D = GGXTerm (nh, roughness);
+    float V = SmithJointGGXVisibilityTerm1 (nl, nv, roughness);
+    float D = GGXTerm1 (nh, roughness);
 #else
     // Legacy
     half V = SmithBeckmannVisibilityTerm (nl, nv, roughness);
     half D = NDFBlinnPhongNormalizedTerm (nh, PerceptualRoughnessToSpecPower(perceptualRoughness));
 #endif
-
+        //镜面反射中D和V的计算。乘以π是因为上面漫反射该除以的π美除，所以式子两边同时乘以π。D为法线分布函数
     float specularTerm = V*D * UNITY_PI; // Torrance-Sparrow model, Fresnel is applied later
-
+//若处于gamma空间
 #   ifdef UNITY_COLORSPACE_GAMMA
         specularTerm = sqrt(max(1e-4h, specularTerm));
 #   endif
 
     // specularTerm * nl can be NaN on Metal in some cases, use max() to make sure it's a sane value
     specularTerm = max(0, specularTerm * nl);
+    //镜面高光开关
 #if defined(_SPECULARHIGHLIGHTS_OFF)
     specularTerm = 0.0;
 #endif
@@ -104,12 +166,17 @@ half4 BRDF1_Unity_PBS1 (half3 diffColor, half3 specColor, half oneMinusReflectiv
     //迪士尼
     //diffclor：s.abedo 基础颜色，也是漫反射
     //gi.diffuse:间接漫反射光
-      //specularColor :镜面反射
+    //specularColor :镜面反射
     half3 diffuse = diffColor * (gi.diffuse + light.color * diffuseTerm);
-    half3 specularColor = specularTerm * light.color * FresnelTerm (specColor, lh);
-    half3 ibl = surfaceReduction * gi.specular * FresnelLerp (specColor, grazingTerm, nv);
-    half3 color = diffuse + specularColor+ibl;
-    return half4(diffColor, 1); 
+    //镜面反射DFG/4coslcov
+    //F为FresnelTerm，specularTerm为DF
+    half3 specularColor = specularTerm * light.color * FresnelTerm1 (specColor, lh);
+    //IBL(ImageBasedLighting 基于图像的光照)
+    //surfaceReduction衰减，gi.specular间接光的镜面反射
+    //FresnelLerp镜面反射在不同角度下的国服F0-F90
+    half3 ibl = surfaceReduction * gi.specular * FresnelLerp1 (specColor, grazingTerm, nv);
+    half3 color = diffuse + specularColor + ibl;
+    return half4(color, 1); 
 }
 
 // Default BRDF to use:
