@@ -362,6 +362,7 @@
 "Assets/Scripts/MyMath.cs"
 "Assets/Scripts/MyMonsterShader.cs"
 "Assets/Scripts/MyMonsterShaderTest.cs"
+"Assets/Scripts/PostProcessing.cs"
 "Assets/Scripts/ShaderLOD.cs"
 "Assets/Scripts/ShowTBN.cs"
 -langversion:9.0
