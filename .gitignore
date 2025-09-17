@@ -4,7 +4,7 @@
 # 但保留这些目录和文件
 !Assets/
 !Notes/
-!!HTMLs/
+!HTMLs/
 
 # 确保.gitignore本身不被忽略
 !.gitignore

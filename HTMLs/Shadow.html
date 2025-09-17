@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x9634;&#x5f71;&#xff08;&#x7f3a;&#x5c11;&#x63a5;&#x53d7;&#x9634;&#x5f71;&#x7b14;&#x8bb0;&#xff09;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="阴影缺少接受阴影笔记">阴影（缺少接受阴影笔记）</h1>
+<h3 id="核心步骤">核心步骤</h3>
+<ul>
+<li>深度图生成：在光源位置设置虚拟相机，开启深度测试/写入，生成ShadowMap（存储最近物体深度值）</li>
+<li>阴影判定：将渲染片段转换到光源空间，比较当前深度与ShadowMap采样值，若当前深度更大则判定为阴影</li>
+<li>技术对比：</li>
+<li>实时阴影：动态生成（如ShadowMapping），适用于移动物体</li>
+<li>烘焙阴影：预生成静态纹理，适用于固定场景</li>
+</ul>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Shadows-1.png" alt="shadows-1"></p>
+<p><strong>CSM（级联阴影）</strong></p>
+<ul>
+<li>作用：近处高精度、远处低精度的分级阴影处理（CSM技术）</li>
+<li>设置路径：Project Settings→Quality→Shadow Cascades（可选None/Two/Four）</li>
+</ul>
+<h3 id="生成阴影实现">生成阴影实现</h3>
+<p><strong>方法一：新写一个pass</strong></p>
+<p>添加 Tag{&quot;LightMode&quot; = &quot;ShadowCaster&quot;}</p>
+<ol>
+<li>appdata中声明float4 vertex:POSITION;和  half3 normal:NORMAL;这是生成阴影所需要的语义.</li>
+<li>v2f中添加V2F_SHADOW_CASTER;用于声明需要传送到片断的数据.</li>
+<li>在顶点着色器中添加TRANSFER_SHADOW_CASTER_NORMALOFFSET(o)，主要是计算阴影的偏移以解决不正确的Shadow Acne和Peter Panning现象.</li>
+<li>在片断着色器中添加SHADOW_CASTER_FRAGMENT(i)</li>
+</ol>
+<p><strong>方法二：Fallback</strong></p>
+<p>使用内部函数已有的shader来制作深度图，
+Fallback应该放在所有Pass定义之后，SubShader之外</p>
+<pre><code>  Subshader{
+    ...
+  }
+  Fallback &quot;Legacy Shaders/VertexLit&quot; 
+</code></pre>
+<h1 id="shader的lod">shader的LOD</h1>
+<p>核心作用：用于实现Shader的高中低配分级，根据项目硬件需求划分不同性能等级的渲染效果</p>
+<ul>
+<li>
+<p>应用场景：在项目规划阶段，针对不同硬件类型(如手机/PC)配置不同复杂度的Shader版本</p>
+</li>
+<li>
+<p>实现方式：通过LOD指令控制Unity运行时自动切换不同SubShader，在脚本处可选择不同quality</p>
+</li>
+<li>
+<p>数值规范：
+正确排序：建议按数值从大到小排列（如600→400→200）</p>
+</li>
+</ul>
+<pre><code>void Update()
+{
+    switch(QualitySettings.currentLevel)
+    {
+        case QualityLevel.High:
+            Shader.globalMaximumLOD = 600;
+            break;
+        case QualityLevel.Medium:
+            Shader.globalMaximumLOD = 400; 
+            break;
+        case QualityLevel.Low:
+            Shader.globalMaximumLOD = 200;
+            break;
+    }
+}
+</code></pre>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Shadows-3.png" alt="shadows-3">
+<img src="file:///e:\test\unity\0903\Notes\images\Shadows-2.png" alt="shadows-2"></p>
+
+            
+            
+        </body>
+        </html>

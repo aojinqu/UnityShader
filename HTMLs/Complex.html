@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x53d8;&#x4f53;&#x4f18;&#x5316;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="变体优化">变体优化</h1>
+<h4 id="例子雾效变体">例子：雾效变体</h4>
+<pre><code class="language-C"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> multi_compile_fog <span class="hljs-comment">//默认。会定义三个变体</span></span>
+<span class="hljs-comment">/* 优化方案一：*/</span>
+<span class="hljs-meta">#<span class="hljs-keyword">pragma</span> multi_compile _ _FOG_LINEAR <span class="hljs-comment">//自定义，只有一个变体</span></span>
+
+<span class="hljs-comment">/* 优化方案二：*/</span>
+<span class="hljs-meta"># <span class="hljs-keyword">pragma</span> skip_variants FOG_EXP FOG_EXP2 <span class="hljs-comment">//直接跳过系统自动生成的两个变体</span></span>
+</code></pre>
+<p>如果使用shader_feature，并勾选下方红框按键，就可以对每个deature只生成一个shader，节省性能，所以能用shader_feature不用complex。</p>
+<p>注意，shader_feature一般用于美术资源的开关，complex一般用于游戏程序的开关。</p>
+<pre><code class="language-C"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> shader_feature A B C</span>
+</code></pre>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Complex-1.png" alt="Complex-1"></p>
+<p>创建变体收集器可以把需要的变体在程序启动时就warmup，会增大native的内存，但对实时内存友好</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Complex-2.png" alt="Complex2"></p>
+<p>可以在settings中把程序不会使用到的变体开关关闭
+<img src="file:///e:\test\unity\0903\Notes\images\Complex-3.png" alt="Complex-3"></p>
+<h1 id="shader-model">Shader Model</h1>
+<h3 id="unity的目标编译级别">Unity的目标编译级别</h3>
+<pre><code class="language-C"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> target x.x<span class="hljs-comment">//指定编译目标级别</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">pragma</span> require xxx<span class="hljs-comment">//声明需要的特定功能</span></span>
+</code></pre>
+<p>版本特性:</p>
+<ul>
+<li>2.0: 基本特性支持</li>
+<li>2.5: 增加偏导函数支持</li>
+<li>3.0: 2.5基础上增加10个插值器、LOD采样等,高版本逐步增加MRT、几何着色器等支持</li>
+<li></li>
+</ul>
+<p>在Camera-ShaderLOD可以修改LOD的数目
+<img src="file:///e:\test\unity\0903\Notes\images\Complex-4.png" alt="Complex-4"></p>
+
+            
+            
+        </body>
+        </html>

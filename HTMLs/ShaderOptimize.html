@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Shader &#x901a;&#x7528;&#x4f18;&#x5316;&#x89c4;&#x5219;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="shader-通用优化规则">Shader 通用优化规则</h1>
+<h3 id="原则一-精度优化">原则一 精度优化</h3>
+<ol>
+<li><strong>三种精度的介绍</strong>：fixed/half/float</li>
+</ol>
+<ul>
+<li>
+<p>精度等级：从低到高依次为fixed（定点数）、half（半精度浮点数）、float（全精度浮点数）</p>
+</li>
+<li>
+<p>硬件支持差异：PC端GPU会统一处理为float精度，移动端GPU部分支持half精度，旧移动设备才支持fixed
+<img src="file:///e:\test\unity\0903\Notes\images\ShaderOpti-1.png" alt="ShaderOpti-1"></p>
+</li>
+</ul>
+<ol start="2">
+<li><strong>不同精度的应用场景</strong></li>
+</ol>
+<ul>
+<li>float适用场景：位置坐标（可能产生大位移）、纹理坐标（UV动画值变化范围大）</li>
+<li>half适用场景：HDR颜色（数值不会超出太多）、方向向量（小范围数值）</li>
+<li>fixed适用场景：普通纹理、非HDR颜色（值域0-1之间）</li>
+</ul>
+<ol start="3">
+<li><strong>精度使用的实际决定因素</strong></li>
+</ol>
+<ul>
+<li>平台适配原则：
+PC平台可自由选择，最终都会转为float
+现代移动端优先使用half
+仅需支持OpenGL ES 2.0的旧设备才需考虑fixed</li>
+<li>开发建议：新项目可抛弃fixed，主要使用half和float组合</li>
+</ul>
+<h3 id="原则二能用顶点着色器就不要用片断"><strong>原则二：能用顶点着色器就不要用片断！！</strong></h3>
+<p><img src="file:///e:\test\unity\0903\Notes\images\ShaderOpti-2.png" alt="ShaderOpti-2"></p>
+<h3 id="原则三不要用多个pass">原则三：不要用多个pass</h3>
+<h3 id="原则四小心使用alphatest和colormask">原则四：小心使用AlphaTest和ColorMask</h3>
+<p>AlphaTest（clip函数）：
+多数平台有性能优势,iOS/PowerVR GPU设备性能极差,必要场景（如树叶/渔网纹理）才使用</p>
+<p>ColorMask：用于通道选择性输出</p>
+<h3 id="原则五对不支持tiling和offset的贴图设置noscaleoffset属性">原则五：对不支持tiling和offset的贴图设置NoScaleOffset属性</h3>
+<h3 id="原则六disablebatching-少用">原则六：DisableBatching 少用</h3>
+<p><img src="file:///e:\test\unity\0903\Notes\images\ShaderOpti-3.png" alt="ShaderOpti-3"></p>
+<p>定义: 禁用批处理的功能，通过在Shader的Tags中添加&quot;DisableBatching&quot;=&quot;true&quot;指令不要用
+两个物体本来会被合批，但是这样对导致分开渲染</p>
+<h3 id="原则七grabpass-少用若用则需要指定贴图">原则七：GrabPass 少用，若用则需要指定贴图</h3>
+<p>作用机制: 抓取当前缓冲区数据并以贴图形式存储到shadow中，可用于采样实现扭曲或折射效果</p>
+<p>一般用于水或特效扭曲</p>
+<p>需要用右边这种方式
+<img src="file:///e:\test\unity\0903\Notes\images\ShaderOpti-4.png" alt="ShaderOpti-4"></p>
+<h3 id="原则八使用shader多级细节lod控制">原则八：使用Shader多级细节（LOD）控制</h3>
+<p>同一Shader内集成高/中/低三档效果实现</p>
+<h3 id="原则九谨慎用overdraw">原则九：谨慎用Overdraw</h3>
+<p>定义: 表示屏幕像素被重复绘制的现象，多发生在半透明物体叠加渲染时。</p>
+<pre><code class="language-C">Tags{<span class="hljs-string">&quot;RenderType&quot;</span>=<span class="hljs-string">&quot;Transparent&quot;</span>}
+</code></pre>
+<p>产生原因:
+半透明物体需要从后往前渲染，导致同一像素可能被多次计算。例如1280×720屏幕中，理想情况应绘制921,600次，但实际可能绘制多个921,600次</p>
+<p>颜色越亮表示overdraw越严重（黑色表示无overdraw）</p>
+<h3 id="原则十减少变体数量">原则十：减少变体数量</h3>
+<ul>
+<li>
+<p>内存占用影响: 变体数量直接影响ShaderLab内存占用，在移动开发中内存资源极其宝贵，特别是低端机型的硬件配置往往非常有限</p>
+</li>
+<li>
+<p>Standard材质问题: Unity内置的Standard材质会产生大量变体（可能达到成千上万个），这将显著增加内存压力。尽量使用自己定义的材质</p>
+</li>
+</ul>
+<h1 id="shader编译目标渲染器">Shader编译目标渲染器</h1>
+<p>Unity的目标渲染器允许开发者只需编写一份Shader代码，即可自动编译生成适用于不同平台的多个版本。我们可以排除特定目标渲染器，来减少Shader编译体量，缩短编译时间，降低内存占用</p>
+<pre><code class="language-C"><span class="hljs-comment">//排除某些</span>
+<span class="hljs-meta">#<span class="hljs-keyword">pragma</span> exclude_renderers</span>
+<span class="hljs-comment">//留下某些</span>
+<span class="hljs-meta">#<span class="hljs-keyword">pragma</span> only_renderers gles metal</span>
+
+</code></pre>
+<p>Shader参考大全
+仅编译指定平台的Shader</p>
+<ol>
+<li>d3d11 - Direct3D 11/12</li>
+<li>glcore - OpenGL 3.x/4.x</li>
+<li>gles - OpenGL ES 2.0</li>
+<li>gles3 - OpenGL ES 3.x</li>
+<li>metal - iOS/Mac Metal</li>
+<li>vulkan - Vulkan</li>
+<li>d3d11_9x - Direct3D 11 9.x feature level, as commonly used on WSA platforms</li>
+<li>xboxone - Xbox One</li>
+<li>ps4 - PlayStation 4
+10.psp2 - PlayStation Vita
+11.n3ds - Nintendo 3DS
+12.wiiu - Nintendo Wii U</li>
+</ol>
+<h1 id="gpu-逻辑渲染管线">GPU 逻辑渲染管线</h1>
+<h3 id="原则十一少用if-else">原则十一：少用if else</h3>
+<p>所有处理单元执行相同指令但处理不同数据
+当遇到if/else分支时，部分单元执行if分支，其他单元执行else分支，所有单元必须等待最慢的分支执行完毕。<strong>分支会导致所有可能路径都被执行</strong>，增加计算时间，因此会导致速度慢。</p>
+<p>当所有处理结果都为true或false时效率才会最高。</p>
+<p>因此，需要注意：</p>
+<ul>
+<li>尽量避免shader中使用分支判断(if/else)</li>
+<li>少循环语句(for/while)的使用</li>
+</ul>
+<p>并行处理特点：</p>
+<ol>
+<li>GPU擅长批量处理相同指令但不同数据</li>
+<li>控制单元少而运算单元多，与CPU架构形成对比</li>
+<li>片段处理通常以2×2像素为基本单位</li>
+</ol>
+
+            
+            
+        </body>
+        </html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>C&num; &#x811a;&#x672c;&#x76f8;&#x5173;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="c-脚本相关">C# 脚本相关</h1>
+<p>注意点</p>
+<ol>
+<li>内部名称与外部名称必须相同
+外部名称：test.cs
+内部名称（类名）：public class test: MonoBehaviour{}<br>
+冒号后表示继承，test为派生类，MonoBehaviour为基类
+<strong>Unity中所有可挂载脚本必须直接或间接继承MonoBehaviour</strong>，因为提供了Unity引擎调用的生命周期方法</li>
+</ol>
+<ul>
+<li>Start(): 在首次帧更新前调用</li>
+<li>Update(): 每帧调用一次</li>
+<li>OnCollision系列: 处理碰撞事件</li>
+<li>OnGUI(): 处理GUI绘制</li>
+</ul>
+<pre><code class="language-C"><span class="hljs-type">void</span> <span class="hljs-title function_">OnGUI</span><span class="hljs-params">()</span>
+{
+   GUI.Button(new Rect(<span class="hljs-type">float</span> x,<span class="hljs-type">float</span> y,<span class="hljs-type">float</span> width,<span class="hljs-type">float</span> height),<span class="hljs-built_in">string</span>)
+}
+</code></pre>
+<h2 id="如何在代码中获和修改取材质">如何在代码中获和修改取材质</h2>
+<pre><code class="language-C"><span class="hljs-type">void</span> <span class="hljs-title function_">OnGUI</span><span class="hljs-params">()</span>
+{
+   <span class="hljs-keyword">if</span> (GUI.Button(new Rect(<span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-number">150</span>, <span class="hljs-number">50</span>), <span class="hljs-string">&quot;受击&quot;</span>))
+   {
+            SkinnedMeshRenderer mr = MyMonster.GetComponentInChildren&lt;SkinnedMeshRenderer&gt;();
+            <span class="hljs-comment">//需要明确：获取的是单个材质还是应用在所有物体上的材质</span>
+            <span class="hljs-comment">//需要明确：获取的变量类型</span>
+            <span class="hljs-comment">//需要明确：获取的变量名称</span>
+            var color =mr.sharedMaterial.GetColor(<span class="hljs-string">&quot;_Color&quot;</span>);
+            mr.sharedMaterial.SetColor(<span class="hljs-string">&quot;_Color&quot;</span>,Color.green);
+
+            Debug.Log(color);
+   }
+}
+</code></pre>
+<h2 id="协程">协程</h2>
+<p>类似于线程。并非真正开辟新线程，而是通过时间分片模拟并行效果。</p>
+<ul>
+<li>基本概念：协程是一种特殊的函数，可以在特定位置暂停执行并在之后恢复，实现并行处理效果而不阻塞主线程。
+<ul>
+<li>IEnumerator：声明协程方法的返回类型</li>
+<li>yield return：协程暂停点。协程不需要 return 值，只需要 yield return。</li>
+<li>WaitForSeconds：常用等待指令，参数单位为秒</li>
+</ul>
+</li>
+<li>应用场景：适用于需要同时处理多个任务但又不希望影响主程序流程的情况，如角色受击闪白效果。</li>
+</ul>
+<pre><code class="language-C"><span class="hljs-comment">//以上三个名称都是协程的固定用法</span>
+    <span class="hljs-type">void</span> <span class="hljs-title function_">Start</span><span class="hljs-params">()</span>
+    {
+        MyMonster = GameObject.Find(<span class="hljs-string">&quot;Character01&quot;</span>);
+        Debug.Log(MyMonster.transform);
+        StartCoroutine(Wait());
+        Debug.Log(<span class="hljs-number">1</span>);
+    }
+    IEnumerator <span class="hljs-title function_">Wait</span><span class="hljs-params">()</span>
+    {
+        yield <span class="hljs-keyword">return</span> new <span class="hljs-title function_">WaitForSeconds</span><span class="hljs-params">(<span class="hljs-number">2</span>)</span>;
+        Debug.Log(<span class="hljs-number">2</span>);
+    }
+</code></pre>
+<p>实现逐帧调用</p>
+<pre><code class="language-C"><span class="hljs-comment">//实现逐帧调用</span>
+IEnumerator <span class="hljs-title function_">getFired</span><span class="hljs-params">(<span class="hljs-type">float</span> time)</span>
+{
+    <span class="hljs-type">float</span> _time = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)
+    {
+        _time += Time.deltaTime;<span class="hljs-comment">//每一帧的时间</span>
+        yield <span class="hljs-keyword">return</span> new <span class="hljs-title function_">WaitForEndOfFrame</span><span class="hljs-params">()</span>; <span class="hljs-comment">//每一帧时停</span>
+
+        <span class="hljs-keyword">if</span> (_time &gt;= <span class="hljs-number">2f</span>)  <span class="hljs-comment">//大于2s就退出循环</span>
+            yield <span class="hljs-keyword">break</span>;<span class="hljs-comment">//退出协程也需要用yield（等价于while中写）</span>
+
+        Color _color = Color.Lerp(Color.red, Color.black, _time / <span class="hljs-number">2f</span>);<span class="hljs-comment">//在两秒内从黑变红，可以用插值制作需要的效果</span>
+        mat.SetColor(<span class="hljs-string">&quot;_Color&quot;</span>, _color);
+    }
+}
+</code></pre>
+<h2 id="协程控制变体">协程控制变体</h2>
+<pre><code class="language-C"><span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)
+{
+    yield <span class="hljs-keyword">return</span> new <span class="hljs-title function_">WaitForEndOfFrame</span><span class="hljs-params">()</span>;
+    _time += Time.deltaTime;
+    <span class="hljs-keyword">if</span> (_time &gt;= time)
+    {
+        mat.SetFloat(<span class="hljs-string">&quot;_Clip&quot;</span>, <span class="hljs-number">0f</span>);
+        <span class="hljs-comment">//mat.DisableKeyword(&quot;_DISSOLVEENABLED_ON&quot;);</span>
+        yield <span class="hljs-keyword">break</span>;
+    }
+    mat.EnableKeyword(<span class="hljs-string">&quot;_DISSOLVEENABLED_ON&quot;</span>);<span class="hljs-comment">//控制材质面板开关Toggle，需要和subshader中声明的一致</span>
+    mat.SetFloat(<span class="hljs-string">&quot;_Clip&quot;</span>, _time / time);
+}
+</code></pre>
+<h2 id="status">Status</h2>
+<p>右上角stats可以查看渲染状态
+<img src="file:///e:\test\unity\0903\Notes\images\CSharp-1.png" alt="C#-1"></p>
+<p><strong>FPS</strong>
+（Frames Per Second）表示每秒渲染的帧数,</p>
+<p>手游开发通常定为30FPS</p>
+<p>PC端可能达到1000-2000FPS</p>
+<ul>
+<li>main：主线程耗时</li>
+<li>render thread：渲染线程耗时</li>
+</ul>
+<p>网格数据：</p>
+<ul>
+<li>Tris：三角面数（示例场景默认1.7k）</li>
+<li>Verts：顶点数（示例场景默认5.0k）</li>
+</ul>
+<p>屏幕信息：</p>
+<ul>
+<li>Screen：分辨率（如1586x892）
+内存占用：16.2MB</li>
+</ul>
+<h3 id="批次">批次</h3>
+<p>要降低消耗，重要的是降低批次，这样Drawcall和setpass call都会降低：</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\CSharp-2.png" alt="C#-2"></p>
+
+            
+            
+        </body>
+        </html>

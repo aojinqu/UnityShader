@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>PBR</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="pbr">PBR</h1>
+<p><img src="file:///e:\test\unity\0903\Notes\images\PBR-1.png" alt="PBR-1"></p>
+<h3 id="pbs">PBS</h3>
+<h3 id="反射探针采样">反射探针采样</h3>
+<p>见shader参考大全Lighting不分</p>
+<pre><code class="language-C">    <span class="hljs-comment">//反射探针中当前激活的CubeMap存储在unity_SpecCube0当中，必须要用UNITY_SAMPLE_TEXCUBE进行采样，然后需要对其进行解码</span>
+    half4 cubemap_reflect = UNITY_SAMPLE_TEXCUBE (unity_SpecCube0, R);
+    half3 skyColor = DecodeHDR (cubemap_reflect, unity_SpecCube0_HDR);
+    <span class="hljs-keyword">return</span> fixed4(skyColor, <span class="hljs-number">1.0</span>);
+</code></pre>
+<p>效果如下图，左下角为采样，右上为反射探针
+<img src="file:///e:\test\unity\0903\Notes\images\PBR-2.png" alt="PBR-2"></p>
+<h3 id="双向反射分布函数brdf">双向反射分布函数BRDF</h3>
+<p><img src="file:///e:\test\unity\0903\Notes\images\BRDF-.png" alt="BRDF-1"></p>
+<p>实操
+做PBR之前先转移到线性空间</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\BRDF-2.png" alt="BRDF-2"></p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\BRDF-3.png" alt="BRDF-3"></p>
+<p>由于上图的原因，Linear空间下会自动对sRGB做解码操作，先移除gamma校正，使用完数据后重新gamma校正。所以对于线性空间下的贴图需要实现勾选下图中的sRBG才能获得正确的结果</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\BRDF-4.png" alt="BRDF-4"></p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\BRDF-5.png" alt="BRDF-5"></p>
+<pre><code class="language-C">
+    <span class="hljs-meta">#<span class="hljs-keyword">if</span> UNITY_BRDF_GGX</span>
+    <span class="hljs-comment">// GGX with roughtness to 0 would mean no specular at all, using max(roughness, 0.002) here to match HDrenderloop roughtness remapping.</span>
+    roughness = max(roughness, <span class="hljs-number">0.002</span>);
+    <span class="hljs-type">float</span> V = SmithJointGGXVisibilityTerm (nl, nv, roughness);
+    <span class="hljs-type">float</span> D = GGXTerm (nh, roughness);
+    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+    <span class="hljs-comment">//镜面反射中D和V的计算。乘以π是因为上面漫反射该除以的π美除，所以式子两边同时乘以π。D为法线分布函数</span>
+    <span class="hljs-type">float</span> specularTerm = V*D * UNITY_PI; <span class="hljs-comment">// Torrance-Sparrow model, Fresnel is applied later</span>
+    
+    <span class="hljs-comment">//镜面反射DFG/4coslcov</span>
+    <span class="hljs-comment">//F为FresnelTerm，specularTerm为DF</span>
+    half3 specularColor = specularTerm * light.color * FresnelTerm (specColor, lh);
+</code></pre>
+<p>D项</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\BRDF-6.png" alt="BRDF-6"></p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\BRDF-8.png" alt="BRDF-8"></p>
+<p>F计算
+<img src="file:///e:\test\unity\0903\Notes\images\BRDF-7.png" alt="BRDF-7"></p>
+<h3 id="brdf的优势">BRDF的优势</h3>
+<p>可以直接在lighting-environment中修改cubemap等参数，shader会自己做适配，不需要自己再修改内部参数。</p>
+<p>如下图，在custom定制模式下，使用一张p2的cubemap环境贴图，可以改变物体表面的ibl效果，不用修改任何shader参数
+<img src="file:///e:\test\unity\0903\Notes\images\BRDF-9.png" alt="BRDF-9">
+<img src="file:///e:\test\unity\0903\Notes\images\BRDF-10.png" alt="BRDF-10"></p>
+
+            
+            
+        </body>
+        </html>

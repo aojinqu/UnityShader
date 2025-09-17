@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x96fe;&#x6548;&#x7684;&#x6df7;&#x5408;&#x516c;&#x5f0f;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="雾效的混合公式">雾效的混合公式</h1>
+<h3 id="原理">原理</h3>
+<p><strong>基本公式：最终颜色 = lerp(物体颜色，雾效颜色，雾效混合因子)</strong></p>
+<p>物体颜色：
+<code>unity_FogColor</code></p>
+<ul>
+<li>混合因子：
+<ul>
+<li>包含物体离视角的距离（决定雾效强度）</li>
+<li>包含雾的浓度（决定雾效的浓淡程度）</li>
+</ul>
+</li>
+<li>实现原理：通过差值计算在物体颜色和雾效颜色之间进行混合</li>
+</ul>
+<h4 id="线性雾效衰减">线性雾效衰减</h4>
+<p>公式：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mi>o</mi><mi>g</mi><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mo>=</mo><mfrac><mrow><mi>e</mi><mi>n</mi><mi>d</mi><mo>−</mo><mi>z</mi></mrow><mrow><mi>e</mi><mi>n</mi><mi>d</mi><mo>−</mo><mi>s</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">fogFactor=\frac{end-z}{end-start} 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">or</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1408em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">t</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>参数说明：</p>
+<ul>
+<li>start：雾开始的位置</li>
+<li>end：雾结束的位置</li>
+<li>z：物体的深度值（这里指物体到摄像机的距离）</li>
+</ul>
+<p>特点：衰减呈直线变化，在Unity中可调节start和end参数</p>
+<h4 id="指数雾效衰减">指数雾效衰减</h4>
+<ol>
+<li>普通指数衰减：
+公式：</li>
+</ol>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mi>o</mi><mi>g</mi><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>d</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo separator="true">⋅</mo><mi>z</mi></mrow></msup></mrow><annotation encoding="application/x-tex">fogFactor=e^{-density·z}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">or</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8991em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mpunct mtight">⋅</span><span class="mord mathnormal mtight" style="margin-right:0.04398em;">z</span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>参数：仅需调节density（雾的浓度）
+特点：衰减曲线呈指数下降</p>
+<ol start="2">
+<li>平方指数衰减：
+公式：</li>
+</ol>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mi>o</mi><mi>g</mi><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><mo stretchy="false">(</mo><mi>d</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo separator="true">⋅</mo><mi>z</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></msup></mrow><annotation encoding="application/x-tex">fogFactor=e^{-(density·z)^2}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">or</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0369em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.0369em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mpunct mtight">⋅</span><span class="mord mathnormal mtight" style="margin-right:0.04398em;">z</span><span class="mclose mtight"><span class="mclose mtight">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-2.931em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>特点：衰减曲线更陡峭
+区别：指数衰减不需要设置start和end参数，通过浓度控制整体效果</p>
+<h2 id="打开雾效">打开雾效</h2>
+<p>网上unity雾效教程说勾选 Windows-&gt;Rendering-&gt;LightingSettings-&gt;OtherSettings-&gt;Fog 即可开启unity 默认雾效，但unity更新后，需要在Windows-&gt;Rendering-&gt;LightingSettings-&gt;Environment-&gt;OtherSettings-&gt;Fog 中才能找到</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Fog-1.png" alt="fog-1"></p>
+<h2 id="实现方法">实现方法</h2>
+<p>需要实现远处的物体颜色与雾色集合，变得模糊。
+共有三种</p>
+<pre><code class="language-C#">  <span class="hljs-keyword">struct</span> v2f
+  {
+      float2 uv : TEXCOORD0;
+
+      float4 vertex : SV_POSITION;
+      float3 worldPos : TEXCOORD2;
+      <span class="hljs-comment">//方法一：自定义雾效插值器</span>
+      <span class="hljs-built_in">float</span> fogFactor: TEXCOORD3;
+      <span class="hljs-comment">//方法二：等于开启雾效时定义一个float类型的变量fogCoord</span>
+      <span class="hljs-comment">//UNITY_FOG_COORDS(1)</span>
+      <span class="hljs-comment">//方法三</span>
+      <span class="hljs-comment">//无需额外定义雾效插值器，但需要将worldPos定义为float4，将计算出来的fogFactor存入worldPos.w中</span>
+
+  };
+</code></pre>
+<p>以下为第一种自定义的写法，用于展示原理</p>
+<pre><code class="language-C#">  <span class="hljs-function">v2f <span class="hljs-title">vert</span> (<span class="hljs-params">appdata v</span>)</span>
+  {
+      v2f o;
+      o.vertex = UnityObjectToClipPos(v.vertex);
+      o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+      o.worldPos = mul(unity_ObjectToWorld,v.vertex);
+      <span class="hljs-built_in">float</span> z= length(o.worldPos-_WorldSpaceCameraPos);<span class="hljs-comment">//计算物体位置到摄像机的距离</span>
+          <span class="hljs-comment">// x = density / sqrt(ln(2)), useful for Exp2 mode</span>
+          <span class="hljs-comment">// y = density / ln(2), useful for Exp mode</span>
+          <span class="hljs-comment">// z = -1/(end-start), useful for Linear mode</span>
+          <span class="hljs-comment">// w = end/(end-start), useful for Linear mode</span>
+          <span class="hljs-comment">//float4 unity_FogParams;以上为其4个参数含义，可以用于获取end start的值</span>
+      <span class="hljs-meta">#<span class="hljs-keyword">if</span> defined(FOG_LINEAR)</span>
+          o.fogFactor= saturate( z*unity_FogParams.z + unity_FogParams.w);<span class="hljs-comment">//不能直接-z！！！！</span>
+      <span class="hljs-meta">#<span class="hljs-keyword">elif</span> defined(FOG_EXP)   </span>
+          o.fogFactor=exp2(-z*unity_FogParams.y);
+      <span class="hljs-meta">#<span class="hljs-keyword">elif</span> defined(FOG_EXP2)</span>
+          
+          o.fogFactor=exp2(-pow(z*unity_FogParams.x,<span class="hljs-number">2</span>));
+      <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+      <span class="hljs-comment">//Unity内部雾效方法</span>
+      <span class="hljs-comment">//UNITY_TRANSFER_FOG(o,o.vertex);</span>
+      <span class="hljs-keyword">return</span> o;
+  }
+</code></pre>
+<p>对物体颜色和雾色做线性插值，是三种雾效共同的做法</p>
+<pre><code class="language-c#">  <span class="hljs-function">fixed4 <span class="hljs-title">frag</span> (<span class="hljs-params">v2f i</span>) : SV_Target</span>
+  {
+    <span class="hljs-comment">// sample the texture</span>
+    fixed4 c =<span class="hljs-number">1</span>;
+
+    <span class="hljs-meta">#<span class="hljs-keyword">if</span> defined (FOG_LINEAR)||(FOG_EXP)||(FOG_EXP2)  </span>
+        c=lerp( unity_FogColor,c,i.fogFactor);
+    <span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+
+    <span class="hljs-comment">// apply fog unity 内部方法</span>
+    <span class="hljs-comment">//UNITY_APPLY_FOG(i.fogCoord, c);</span>
+    <span class="hljs-keyword">return</span> c;
+  }
+</code></pre>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+            
+        </body>
+        </html>

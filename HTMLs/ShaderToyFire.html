@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>ShaderToy</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h2 id="shadertoy">ShaderToy</h2>
+<h3 id="shadertoy复刻">ShaderToy复刻</h3>
+<p><strong>尝试复刻余弦渐变色彩效果</strong>
+屏幕颜色随时间变化而渐变改变：<a href="https://www.shadertoy.com/new">https://www.shadertoy.com/new</a></p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\ShaderToy-1.png" alt="ShaderToy-1">
+<img src="file:///e:\test\unity\0903\Notes\images\ShaderToy-2.png" alt="ShaderToy-2"></p>
+<pre><code class="language-C">fixed4 <span class="hljs-title function_">frag</span> <span class="hljs-params">(v2f i)</span> : SV_Target
+{
+    float3 col =<span class="hljs-number">0.5</span> + <span class="hljs-number">0.5</span>*<span class="hljs-built_in">cos</span>(_Time.y + i.uv.xyx+ float3(<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">4</span>)); <span class="hljs-comment">//关键</span>
+    <span class="hljs-keyword">return</span> 
+    <span class="hljs-keyword">return</span> float4(col,<span class="hljs-number">1.0</span>);
+}
+</code></pre>
+<p><strong>解析关键句</strong>：
+float3 col =0.5 + 0.5*cos(_Time.y + i.uv.xyx+ float3(0,2,4));</p>
+<p>基础波形生成：cos()函数产生周期性波动</p>
+<p>空间变化：i.uv.xyx使波形随屏幕位置变化</p>
+<p>时间变化：_Time.y使波形随时间推移</p>
+<p>色彩分离：float3(0,2,4)使RGB通道相位错开</p>
+<p>范围标准化：0.5 + 0.5*将输出映射到0-1范围</p>
+<ol>
+<li>
+<p>空间变化维度 i.uv.xyx
+i.uv.xyx 创建了一个三维向量 (u, v, u)，其中：</p>
+<p>u = 水平方向的UV坐标（0到1）</p>
+<p>v = 垂直方向的UV坐标（0到1）</p>
+<pre><code> 水平渐变：颜色随X坐标变化
+
+ 垂直渐变：颜色随Y坐标变化
+
+ 对角线效应：由于使用了u和v的组合，会产生对角线方向的渐变
+</code></pre>
+</li>
+<li>
+<p>时间变化维度 _Time.y</p>
+<pre><code> _Time.y 提供第四维度——时间，使整个色彩图案动态变化：
+
+ 每经过一段时间，所有点的颜色相位都在变化
+
+ 产生流动、波动的视觉效果
+</code></pre>
+</li>
+</ol>
+<h3 id="复刻一个shadertoy">复刻一个ShaderToy</h3>
+<p>需要注意看注释！！！！有时候注释的提示比自己想有用多了</p>
+<ol>
+<li>
+<p>先尽量复刻。若复刻途中报错，从后往前逐步输出，看少了哪一步就会有不同的画面，则问题出在这一步骤上</p>
+</li>
+<li>
+<p>弄清楚关键步骤，各个函数都是做什么的。这一步同样要多利用输出，去看这个步骤输出的是什么</p>
+</li>
+<li>
+<p>进入函数看具体值。逐行。</p>
+</li>
+<li>
+<p>刚开始不要过于集中在算法怎么实现上。要学会好平衡，学会利用工具。</p>
+</li>
+</ol>
+<h3 id="卡通火">卡通火</h3>
+<p><img src="file:///e:\test\unity\0903\Notes\images\ShaderToy-3.png" alt="ShaderToy-3"></p>
+<h4 id="getdepth">GetDepth()</h4>
+<p>以下函数是 Unity Shader 中实现“色调分离”（Posterization）效果的经典代码，常用于创造风格化的颜色边缘或卡通渲染（Cel-Shading）中的色阶效果。</p>
+<p>这个 getDepth 函数接收一个 0-1 范围的输入值 n（通常代表灰度、高度或深度信息），然后将其量化为有限的几个色阶，最终返回一个也是 0-1 范围的、但只有几个特定值的输出。</p>
+<pre><code class="language-C"><span class="hljs-type">float</span> <span class="hljs-title function_">getDepth</span><span class="hljs-params">(<span class="hljs-type">float</span> n)</span>
+{            
+    <span class="hljs-comment">//given a 0-1 value return a depth,                </span>
+    <span class="hljs-comment">//remap remaining non-cutoff region to 0 - 1</span>
+    <span class="hljs-comment">//这一步的效果是： 创造了一个“死区”，_Cutoff 以下的所有输入被floor处理后最终都会被归入最低的色阶（通常是0）。</span>
+    <span class="hljs-type">float</span> d = (n - _Cutoff) / (<span class="hljs-number">1.0</span> - _Cutoff);                     
+    <span class="hljs-comment">//step it 色调分离</span>
+    d = <span class="hljs-built_in">floor</span>(d*_Step)/_Step;                
+    <span class="hljs-keyword">return</span> d;
+}
+</code></pre>
+<ul>
+<li>
+<p>float d = (n - _Cutoff) / (1.0 - _Cutoff);</p>
+<pre><code> (n - _Cutoff)：将输入值 n 向下平移 _Cutoff。如果 n &lt; _Cutoff，结果会是负数。
+
+/(1.0 - _Cutoff)：将上一步的结果重新映射到 [0, 1] 区间。
+
+当 n = _Cutoff 时，d = 0；当 n = 1.0 时，d = 1。
+</code></pre>
+</li>
+<li>
+<p>d = floor(d*_Step)/_Step;</p>
+<p>第一步：d * _Step
+将 [0, 1] 区间的 d 放大 _Step 倍，映射到 [0, _Step] 区间。</p>
+<pre><code>_Step 的含义：它不是指阶梯的数量，而是指阶梯的间隔数。阶梯的数量是 _Step + 1。
+
+例如 _Step = 3，意味着把 [0,1] 分成 3 个间隔，从而产生 4 个色阶（0.0, 0.333, 0.666, 1.0）。
+</code></pre>
+<p>第二步：floor(d * _Step)</p>
+<pre><code>floor() 函数是向下取整。它会砍掉小数部分，只保
+留整数。这一步将连续的放大后的值，“强行”归类到有限的几个整数上。
+</code></pre>
+<p>第三步：/ _Step</p>
+<pre><code>将取整后的整数结果再除以 _Step，将其重新压缩回 [0, 1] 区间。
+</code></pre>
+</li>
+</ul>
+<p>Substance中调试如下：</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\ShaderToy-4.png" alt="ShaderToy-4"></p>
+<h4 id="色相h饱和度s-和明度v">色相(H)、饱和度(S) 和明度(V)</h4>
+<pre><code class="language-C"><span class="hljs-comment">//对卡通火着色   </span>
+float3 hsv = float3(d *<span class="hljs-number">0.17</span>,<span class="hljs-number">0.8</span> - d/<span class="hljs-number">4.</span>, d + <span class="hljs-number">0.8</span>);
+col = hsv2rgb(hsv);
+</code></pre>
+<h3 id="调整火焰形态">调整火焰形态</h3>
+<p>可以通过调整_CutOff 来得到不同形状的火焰:<code>_Cutoff *=pow(1-abs(i.uv.x*2-1),0.07);</code>
+制作出不同的噪声图
+<img src="file:///e:\test\unity\0903\Notes\images\ShaderToy-6.png" alt="ShaderToy-6"></p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\ShaderToy-5.png" alt="ShaderToy-5"></p>
+<p>加fireglow还可以模拟出屏幕边缘的颜色效果</p>
+<pre><code class="language-C"><span class="hljs-comment">//做一张屏幕周围暗，中间亮的图，若对fireGlow加时间变换，还可以模拟出忽明忽暗的效果。</span>
+  fixed4 fireGlow= (<span class="hljs-number">1</span>-_Cutoff)*fixed4(<span class="hljs-number">1</span>,<span class="hljs-number">0.161</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>);
+  ...
+  <span class="hljs-comment">//用*=还是+=看效果</span>
+  col+=mainTex;
+  col+=fireGlow;
+</code></pre>
+<p><img src="file:///e:\test\unity\0903\Notes\images\ShaderToy-7.png" alt="ShaderToy-7"></p>
+
+            
+            
+        </body>
+        </html>

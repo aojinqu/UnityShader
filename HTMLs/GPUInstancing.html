@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>GPU Instancing</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="gpu-instancing">GPU Instancing</h1>
+<p>批次合并效果：当场景中有多个相同模型时，GPU实例化可以将它们合并为少量批次（通常每批次最多500个对象），用于对多个对象(网格一样，材质一样，但是材质属性不一样)合批,单个合批最大上限为511个对象。</p>
+<p>性能优化限制：超过500个对象时会自动分成第二个批次，存在一定的数量限制。</p>
+<p>GPU Instancing<strong>需要硬件支持+Shader支持+脚本支持</strong>。</p>
+<h2 id="shader支持">Shader支持</h2>
+<p>使用材质属性块可以实现对每个生成的物体进行个性化定制，需要的步骤如下：</p>
+<ol>
+<li>#pragma multi_compile_instancing 添加此指令后会使材质面板上曝露Instaning开关,同时会生成相应的Instancing变体</li>
+<li>UNITY_VERTEX_INPUT_INSTANCE_ID 在顶点着色器的输入(appdata)和输出(v2f,可选项)中添加</li>
+<li>UNITY_INSTANCING_BUFFER_START(arrayName) / UNITY_INSTANCING_BUFFER_END(arrayName) 将每个你需要实例化的属性都封装在这个常量寄存器中</li>
+<li>UNITY_DEFINE_INSTANCED_PROP(type, name) 在上面的START和END间把需要的每条属性加进来</li>
+<li>UNITY_SETUP_INSTANCE_ID(v); 需放在顶点着色器/片断着色器(可选)中最开始的地方,这样才能访问到全局的unity_InstanceID</li>
+<li>UNITY_TRANSFER_INSTANCE_ID(v, o); 当需要将实例化ID传到片断着色器时,在顶点着色器中添加</li>
+<li>UNITY_ACCESS_INSTANCED_PROP(arrayName, propName) 在片断着色器中访问具体的实例化变量</li>
+</ol>
+<p>尝试只使用GPU Instancing但不使用材质属性块，如下：</p>
+<p>注意：一定要设置好static物体，使用静态合批，并将脚本挂在camera上，否则很可能导致占用过大而闪退！！</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\GPU-1.png" alt="GPU-1"></p>
+<p>可以更换颜色</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\GPU-2.png" alt="GPU-2"></p>
+<h3 id="常量寄存器">常量寄存器</h3>
+<p>如果除了位置以外，还想要对其他的属性进行个性化定制，如color或者其他float，则需要使用<strong>常量寄存器</strong>，具体步骤如上步骤。</p>
+<pre><code class="language-C">    <span class="hljs-comment">//关键代码，在frag中使用变量需要做处理</span>
+    <span class="hljs-keyword">return</span> i.wPos.y*<span class="hljs-number">0.15</span>+UNITY_ACCESS_INSTANCED_PROP(prop,_Color );
+</code></pre>
+<h2 id="脚本支持">脚本支持</h2>
+<p>使用材质属性块，可以在batch为1的前提下完成对每个新生成的物体的个性化渲染。</p>
+<p>修改方式：必须通过MaterialPropertyBlock修改材质属性</p>
+<p>批量修改原则：同一批次内修改的属性必须都在Shader的常量寄存器中定义</p>
+<p>错误示范：修改未声明的属性会打断批次合并效果</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\GPU-3.png" alt="GPU-3"></p>
+<pre><code class="language-C"><span class="hljs-comment">//start(){}</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; Count; i++)
+{
+    Vector2 pos = Random.insideUnitCircle * Range;<span class="hljs-comment">//生成单位圆</span>
+    GameObject tree = Instantiate(Prefab, new Vector3(pos.x, <span class="hljs-number">-5</span>, pos.y), Quaternion.identity);<span class="hljs-comment">//自动生成，并有一定角度的旋转</span>
+
+    <span class="hljs-comment">//随机生成颜色</span>
+    Color newCol = new Color(Random.value, Random.value, Random.value, Random.value);
+
+    <span class="hljs-comment">//使用材质属性块:先声明，然后把要赋的类型给材质属性块，最后重新设置gameobject的材质属性块</span>
+    MaterialPropertyBlock prop = new MaterialPropertyBlock();
+    prop.SetColor(<span class="hljs-string">&quot;_Color&quot;</span>, newCol);
+    tree.GetComponentInChildren&lt;MeshRenderer&gt;().SetPropertyBlock(prop);
+    
+    <span class="hljs-comment">//会给每个生成的object都分配一次颜色然后通过不同的批次实现，非常耗费资源</span>
+    <span class="hljs-comment">//tree.GetComponent&lt;MeshRenderer&gt;().material.SetColor(&quot;_Color&quot;, newCol);</span>
+}
+</code></pre>
+
+            
+            
+        </body>
+        </html>

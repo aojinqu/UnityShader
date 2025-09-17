@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x540e;&#x5904;&#x7406;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="后处理">后处理</h1>
+<p><img src="file:///e:\test\unity\0903\Notes\images\POST-1.png" alt="POST-1"></p>
+<h3 id="static-关键字">static 关键字</h3>
+<p>在 C++ 中，需要一个数据对象为整个类而非某个对象服务,同时又力求不破坏类的封装性,即要求此成员隐藏在类的内部，对外不可见时，可将其定义为静态数据。</p>
+<ol>
+<li>被 static 修饰的变量属于类变量，可以通过类名.变量名直接引用，而不需要 new 出一个类来</li>
+<li>被 static 修饰的方法属于类方法，可以通过类名.方法名直接引用，而不需要 new 出一个类来</li>
+</ol>
+<p><strong>总结：通过static关键字标记成员，无需实例化即可直接通过类名访问</strong></p>
+<p>在 C++ 中，静态成员是属于整个类的而不是某个对象，静态成员变量只存储一份供所有对象共用。所以在所有对象中都可以共享它。使用静态成员变量实现多个对象之间的数据共享不会破坏隐藏的原则，保证了安全性还可以节省内存。</p>
+<p><strong>属性</strong></p>
+<p>通过私有字段保护数据，公有属性暴露可控接口。例如：public int Age { get { return age; } set { age = value; } }</p>
+<p>封装目的：防止直接修改字段，可在set中添加校验逻辑（如年龄范围限制）。</p>
+<h2 id="后处理脚本">后处理脚本</h2>
+<p>后期处理是在Unity中对渲染图像应用效果的方法，通过OnRenderImage函数实现，该脚本只能挂在Camera上。</p>
+<table>
+<thead>
+<tr>
+<th>知识点</th>
+<th>核心内容</th>
+<th>重点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>后处理脚本规范</td>
+<td>介绍如何规范通用的后处理脚本，包括环境准备、脚本添加和效果验证</td>
+<td>必须使用_MainTex命名接收纹理，否则效果失效</td>
+</tr>
+<tr>
+<td>Shader属性声明</td>
+<td>在Shader中声明_MainTex属性以接收渲染纹理，需同时在Properties和CG代码中定义</td>
+<td>属性名修改会导致纹理传递失败</td>
+</tr>
+<tr>
+<td>剔除与深度设置</td>
+<td>后处理Shader需配置Cull Off、ZWrite Off、ZTest Always确保正确渲染</td>
+<td>剔除模式错误会导致画面异常</td>
+</tr>
+<tr>
+<td>Unity内置优化</td>
+<td>使用UnityCG.cginc中的appdata_img、v2f_img和vert_img简化顶点处理流程</td>
+<td>结构体字段名需与内置命名一致（如texcoord）</td>
+</tr>
+<tr>
+<td>片段着色器核心</td>
+<td>后处理效果主要在片段着色器中实现（如颜色反转），需基于_MainTex采样处理</td>
+<td>忽略纹理采样会导致输出黑屏</td>
+</tr>
+</tbody>
+</table>
+<h1 id="后处理实现-黑白阈值后处理效果">后处理实现-黑白阈值后处理效果</h1>
+<p>需要创建一个后处理效果shader，并在cs脚本中实现拖入shader自动创建材质。</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\POST-2.png" alt="POST-2"></p>
+<p>记录黑白滤镜效果：
+<img src="file:///e:\test\unity\0903\Notes\images\POST-3.png" alt="POST-3"></p>
+<p>实现如下：</p>
+<pre><code class="language-C"><span class="hljs-comment">//后处理shader</span>
+fixed4 <span class="hljs-title function_">frag</span> <span class="hljs-params">(v2f_img i)</span> : SV_Target
+{
+    fixed4 col = tex2D(_MainTex, i.uv);
+    <span class="hljs-comment">//黑白滤镜</span>
+    <span class="hljs-keyword">return</span> step(col.r,<span class="hljs-number">0.1</span>);<span class="hljs-comment">//与PS相反。但这样效果更好，所以用了</span>
+}
+</code></pre>
+<pre><code class="language-C#"><span class="hljs-comment">//C#脚本</span>
+    [<span class="hljs-meta">Range(0,1)</span>]<span class="hljs-keyword">public</span> <span class="hljs-built_in">float</span> Value;  <span class="hljs-comment">//制作滑杆</span>
+
+<span class="hljs-keyword">public</span> Material Mat
+{
+    <span class="hljs-keyword">get</span>
+    {
+        <span class="hljs-keyword">if</span> (PostProcessingShader == <span class="hljs-literal">null</span>){...}
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!PostProcessingShader.isSupported){...}
+        <span class="hljs-keyword">if</span> (mat == <span class="hljs-literal">null</span>)<span class="hljs-comment">//这段是为了防止每一帧都生成一个新的材质球</span>
+        {
+            <span class="hljs-comment">//将shader直接包装成材质球(可以直接用声明material的形式)</span>
+            Material _newMat = <span class="hljs-keyword">new</span> Material(PostProcessingShader);
+            _newMat.hideFlags = HideFlags.HideAndDontSave;<span class="hljs-comment">//不保存材质球，用完就删掉</span>
+            mat = _newMat;
+        }
+        <span class="hljs-keyword">return</span> mat;
+    }
+}
+</code></pre>
+<p>最后可以实现利用脚本的滑杆拖动，完成不同的黑白滤镜效果（滑动制作成动画，背景可以像一只眼睛一样闭合，效果非常好！！！）</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\POST-4.png" alt="POST-4"></p>
+
+            
+            
+        </body>
+        </html>
