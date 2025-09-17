@@ -18,7 +18,7 @@
 
 
 ### 双向反射分布函数BRDF
-  ![BRDF-1](./images/BRDF-.png)
+  ![BRDF-1](./images/BRDF-1.png)
 
 
 实操
@@ -52,13 +52,12 @@
 
 
 D项
-
   ![BRDF-6](./images/BRDF-6.png)
 
   ![BRDF-8](./images/BRDF-8.png)
 
 
-F计算
+F项
   ![BRDF-7](./images/BRDF-7.png)
 
 ### BRDF的优势

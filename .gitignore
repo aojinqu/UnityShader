@@ -21,10 +21,10 @@
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
-/Library/
-/Temp/
+[Ll]ogs/
+/[Pp]ackages
+Library/
+Temp/
 # 忽略项目文件
 /*.csproj
 /*.sln

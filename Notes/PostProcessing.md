@@ -1,9 +1,9 @@
 # 后处理
 
-  ![POST-1](./images/POST-1.png)
+  ![POST-1](./images/Post-1.png)
 
 
-### static 关键字
+## static 关键字
 在 C++ 中，需要一个数据对象为整个类而非某个对象服务,同时又力求不破坏类的封装性,即要求此成员隐藏在类的内部，对外不可见时，可将其定义为静态数据。
 
 1. 被 static 修饰的变量属于类变量，可以通过类名.变量名直接引用，而不需要 new 出一个类来
@@ -35,10 +35,10 @@
 # 后处理实现-黑白阈值后处理效果
 需要创建一个后处理效果shader，并在cs脚本中实现拖入shader自动创建材质。
 
-  ![POST-2](./images/POST-2.png)
+  ![POST-2](./images/Post-2.png)
 
   记录黑白滤镜效果：
-    ![POST-3](./images/POST-3.png)
+    ![POST-3](./images/Post-3.png)
 
   实现如下：
 ```C
@@ -75,4 +75,4 @@ public Material Mat
 
 最后可以实现利用脚本的滑杆拖动，完成不同的黑白滤镜效果（滑动制作成动画，背景可以像一只眼睛一样闭合，效果非常好！！！）
 
-![POST-4](./images/POST-4.png)
+![POST-4](./images/Post-4.png)

@@ -21,7 +21,7 @@ Shader "aj7/Globalillumination"
             #include "Lighting.cginc" // 包含光照相关的函数
             #include "AutoLight.cginc" // 包含自动光照相关的函数
             //#include "./CGIncludes/MYGI.cginc"//不能直接这样写，一定要返回到shader，原因不明
-            #include "../Shaders/CGIncludes/MYGI.cginc" // 包含自定义的GI相关函数
+            #include "../BuildIn/CGIncludes/MYGI.cginc" // 包含自定义的GI相关函数
 
             struct appdata
             {

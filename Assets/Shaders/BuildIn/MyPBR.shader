@@ -35,7 +35,7 @@ Shader"aj7/MyPBR"
             #include "Lighting.cginc"
             #include "UnityPBSLighting.cginc"
             #include "AutoLight.cginc"
-            #include "../Shaders/CGIncludes/MYPBR.cginc" // 包含自定义的GI相关函数
+            #include "../BuildIn/CGIncludes/MYPBR.cginc" // 包含自定义的GI相关函数
 
             sampler2D _MainTex;
             sampler2D _MetallicTex;
