@@ -4,7 +4,7 @@ Shader "Hidden/TestImageEffect"
     {
         //最重要！！！！一定要把传进来的画面图声明为_MainTex
         _MainTex ("Texture", 2D) = "white" {}
-        _Value("Value",float)=0
+        //_Value("Value",float)=0   //脚本获取的变量可以在shader中不做声明
     }
     SubShader
     {
