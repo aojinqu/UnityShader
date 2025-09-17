@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\MyCPU.cs" />
     <Compile Include="Assets\Scripts\ShowTBN.cs" />
     <Compile Include="Assets\Scripts\FunctionTest.cs" />
+    <Compile Include="Assets\ShaderToy\ShaderToyManager.cs" />
     <Compile Include="Assets\Scripts\MyMonsterShaderTest.cs" />
     <Compile Include="Assets\Scripts\MaterialPropertyBlockTest.cs" />
   </ItemGroup>
@@ -85,6 +86,7 @@
     <None Include="Assets\Arts\Shaders\CharacterUnlit.shader" />
     <None Include="Assets\Shaders\CGIncludes\MYPBR.cginc" />
     <None Include="Assets\Shaders\Character01.shader" />
+    <None Include="Assets\ShaderToy\DefaultShaderToy.shader" />
     <None Include="Assets\Shaders\Globalillumination.shader" />
     <None Include="Assets\Shaders\XRay.shader" />
     <None Include="Assets\Shaders\MyPBR.shader" />
@@ -95,6 +97,7 @@
     <None Include="Assets\Shaders\UIGray.shader" />
     <None Include="Assets\Shaders\Trees.shader" />
     <None Include="Assets\Shaders\TexureTutorial.shader" />
+    <None Include="Assets\ShaderToy\CartoonFire.shader" />
     <None Include="Assets\Shaders\PostProcessing\TestImageEffect.shader" />
     <None Include="Assets\Arts\Shaders\CGIncludes\MyGlobalIllumination.cginc" />
     <None Include="Assets\Shaders\LightModel.shader" />

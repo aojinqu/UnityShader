@@ -365,6 +365,7 @@
 "Assets/Scripts/PostProcessing.cs"
 "Assets/Scripts/ShaderLOD.cs"
 "Assets/Scripts/ShowTBN.cs"
+"Assets/ShaderToy/ShaderToyManager.cs"
 -langversion:9.0
 /deterministic
 /optimize+
