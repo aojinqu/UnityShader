@@ -12,6 +12,7 @@
 # 额外确保这些目录下的内容不被忽略
 !Assets/**
 !Notes/**
+!HTMLs/**
 
 # 忽略Unity生成的文件
 /[Ll]ibrary/
