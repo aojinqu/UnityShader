@@ -57,7 +57,7 @@ UnityPerMaterial: 存放材质属性(需手动配置)
 3. 所有材质属性必须声明在同一个CBUFFER中
   
 
-### 常量缓冲区CBUFFER  4
+### 常量缓冲区CBUFFER
 可以存在GPU显存中，和GPU的传输特别快
 ```C
 CBUFFER_START(UnityPerMaterial)
@@ -103,23 +103,30 @@ float4 _MainTex_ST;
 #define smp _linear_clampU_mirror  //改变后者能得到不同的采样器，并且覆盖纹理材质在inspector上的设置
 SAMPLER(smp);   //声明对应的采样器
 
-。。。
+...
+
 // fragment shader
 half4 mainTex=SAMPLE_TEXTURE2D(_MainTex,smp,i.uv);
 ```
 
 优势：同时使用一个采样器，可以无视采样贴图的数量限制
 
-## URP下的法线
+## URP案例：鬼魂的制作
 案例：边缘光（鬼魂）效果=边缘光+半透明
 
+## URP下的法线
+
 分析：边缘发光效果其实与lambert光照“相反”，因为本身是中间亮两头暗，但边缘发光则是中间暗两头亮
+
 ```max(0,dot(N,L))```如下:
+
   ![URP-6](./images/URP-6.png)
-```1-max(0,dot(N,L))```如下
+  
+```1-max(0,dot(N,L))```如下:
+
   ![URP-](./images/URP-7.png)
 
-实现：
+鬼魂初步实现：
 ```C
 half4 frag (Varyings i) : SV_Target
 {
