@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\BuildIn\framework.shader" />
+    <None Include="Assets\Examples\Ghost\Ghost.shader" />
     <None Include="Assets\Shaders\BuildIn\Properties.shader" />
     <None Include="Assets\Shaders\BuildIn\CGIncludes\MYGI.cginc" />
     <None Include="Assets\Shaders\BuildIn\Fog.shader" />

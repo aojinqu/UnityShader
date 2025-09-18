@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/ShaderToyFireScene.unity
+- path: Assets/Scenes/GhostScene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
