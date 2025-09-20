@@ -64,12 +64,14 @@
     <Analyzer Include="D:\work\UnityEditor\2022.3.29f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Examples\Ghost\GhostController.cs" />
     <Compile Include="Assets\Scripts\GPUInstancing.cs" />
     <Compile Include="Assets\Scripts\MyMath.cs" />
     <Compile Include="Assets\Scripts\MonsterShaderTest.cs" />
     <Compile Include="Assets\Scripts\ShaderLOD.cs" />
     <Compile Include="Assets\Scripts\MyFirstScript.cs" />
     <Compile Include="Assets\Scripts\PostProcessing.cs" />
+    <Compile Include="Assets\Examples\Common\RotateSelf.cs" />
     <Compile Include="Assets\Scripts\MyMonsterShader.cs" />
     <Compile Include="Assets\Scripts\MyCPU.cs" />
     <Compile Include="Assets\Scripts\ShowTBN.cs" />
@@ -79,12 +81,19 @@
     <Compile Include="Assets\Scripts\MaterialPropertyBlockTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Shaders\BuildIn\framework.shader" />
     <None Include="Assets\Examples\Ghost\Ghost.shader" />
+    <None Include="Assets\Examples\Common\Checker.Shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Shaders\BuildIn\Properties.shader" />
     <None Include="Assets\Shaders\BuildIn\CGIncludes\MYGI.cginc" />
     <None Include="Assets\Shaders\BuildIn\Fog.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Arts\Shaders\CharacterUnlit.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Shaders\BuildIn\CGIncludes\MYPBR.cginc" />
     <None Include="Assets\Shaders\BuildIn\Character01.shader" />
     <None Include="Assets\Shaders\URP\SimplestURP.shader" />
@@ -92,20 +101,34 @@
     <None Include="Assets\Shaders\BuildIn\Globalillumination.shader" />
     <None Include="Assets\Shaders\BuildIn\XRay.shader" />
     <None Include="Assets\Shaders\BuildIn\MyPBR.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
+    <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
     <None Include="Assets\Arts\Shaders\CGIncludes\MyPhysicallyBasedRendering.cginc" />
     <None Include="Assets\Shaders\BuildIn\heatDistort_optimize.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\Shaders\BuildIn\effect.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Arts\Shaders\FrameWork.shader" />
     <None Include="Assets\Shaders\BuildIn\UIGray.shader" />
     <None Include="Assets\Shaders\BuildIn\Trees.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Shaders\BuildIn\TexureTutorial.shader" />
     <None Include="Assets\ShaderToy\CartoonFire.shader" />
     <None Include="Assets\Shaders\BuildIn\PostProcessing\TestImageEffect.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Arts\Shaders\CGIncludes\MyGlobalIllumination.cginc" />
     <None Include="Assets\Shaders\BuildIn\LightModel.shader" />
-    <None Include="Assets\Shaders\BuildIn\plane.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\Shaders\BuildIn\outline.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Shaders\BuildIn\heatDistort.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

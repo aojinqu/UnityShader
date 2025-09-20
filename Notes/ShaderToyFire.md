@@ -12,7 +12,6 @@
 fixed4 frag (v2f i) : SV_Target
 {
     float3 col =0.5 + 0.5*cos(_Time.y + i.uv.xyx+ float3(0,2,4)); //关键
-    return 
     return float4(col,1.0);
 }
 ```

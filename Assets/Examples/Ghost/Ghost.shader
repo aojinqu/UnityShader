@@ -7,6 +7,8 @@ Shader "aj7/Unlit/Ghost"
         _Offset("Offset",Range(-1,1))=0
         _Animation("Repeat(XZ),Intensity(YW)",vector)=(5,0.05,5,0.1)
     }
+    //第一个SubShader写URP通用的渲染管线
+    //第二个写BuildIn。如果第一个匹配不上就会走到第二个。
     SubShader
     {
         Tags
@@ -45,13 +47,13 @@ Shader "aj7/Unlit/Ghost"
                 float4 vertex : SV_POSITION;
                 float3 worldPosWS:TEXCOORD1;
                 float3 normalWS:TEXCOORD2;  //WS:World Space
-                float3 ObjectPosWS:TEXCOORD3;  
+                float3 ObjectPosOS:TEXCOORD3;  
             };
 
             Varyings vert (Attributes v)
             {
                 Varyings o;
-                o.ObjectPosWS=v.vertex;
+                o.ObjectPosOS=v.vertex;
                 //顶点偏移动画
                 v.vertex.x+=sin((v.vertex.y+_Time.y)*_Animation.x)*_Animation.y;  //里面xz调节动画速度，外面yw调节动画移动幅度
                 v.vertex.z+=sin((v.vertex.y+_Time.y)*_Animation.z)*_Animation.w;  
@@ -76,7 +78,7 @@ Shader "aj7/Unlit/Ghost"
                 half4 fresnel=pow(dotNV,_Fresnel.x)*_Fresnel.y*_FresnelColor;
                 
                 //创建从上到下的黑白遮罩
-                half mask = saturate( i.ObjectPosWS.y+i.ObjectPosWS.z+_Offset);//凡是乘等于c的变量，都要注意它的正负性和是否范围(0,1)
+                half mask = saturate( i.ObjectPosOS.y+i.ObjectPosOS.z+_Offset);//凡是乘等于c的变量，都要注意它的正负性和是否范围(0,1)
 
                 //c=fresnel*mask+mask*0.1*_FresnelColor;//加上后面的之后上面的模型和下面的模型的菲涅尔效果也是不同的
 
@@ -85,6 +87,81 @@ Shader "aj7/Unlit/Ghost"
                 return c;
             }
             ENDHLSL
+        }
+    }
+
+        //BuildIn
+    SubShader
+    {
+        Tags 
+        {            
+            "RenderType"="Transparent"
+            "Queue"="Transparent" 
+        }
+        LOD 100
+        BLEND One One
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "UnityCG.cginc"
+
+            half4 _Fresnel;
+            half4 _FresnelColor;
+            half _Offset;
+            half4 _Animation;
+            
+            struct appdata
+            {
+                float2 uv:TEXCOORD0;
+                float4 vertexOS : POSITION;
+                float3 normalOS:NORMAL;  //OS: Object Space
+            };
+
+            struct v2f
+            {
+                float2 uv:TEXCOORD0;
+                float4 vertexOS : SV_POSITION;
+                float3 worldPosWS:TEXCOORD1;
+                float3 normalWS:TEXCOORD2;  //WS:World Space
+                float3 ObjectPosOS:TEXCOORD3;
+            };
+
+            v2f vert (appdata v)
+            {
+                v2f o;
+
+                o.ObjectPosOS=v.vertexOS;
+                //顶点偏移动画
+                v.vertexOS.x+=sin((v.vertexOS.y+_Time.y)*_Animation.x)*_Animation.y;  //里面xz调节动画速度，外面yw调节动画移动幅度
+                v.vertexOS.z+=sin((v.vertexOS.y+_Time.y)*_Animation.z)*_Animation.w;  
+
+                o.normalWS=UnityObjectToWorldNormal(v.normalOS);                
+                o.worldPosWS =mul(unity_ObjectToWorld,v.vertexOS);
+
+                o.vertexOS = UnityObjectToClipPos(v.vertexOS);
+
+                return o;
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            { 
+                half4 c;
+                half3 N = normalize(i.normalWS);    
+                half3 V =normalize(_WorldSpaceCameraPos-i.worldPosWS); 
+                half dotNV=1-saturate(dot(N,V));
+ 
+                half4 fresnel=pow(dotNV,_Fresnel.x)*_Fresnel.y*_FresnelColor;                
+                //创建从上到下的黑白遮罩
+                half mask = saturate( i.ObjectPosOS.y+i.ObjectPosOS.z+_Offset); 
+ 
+                fresnel =lerp(fresnel,_FresnelColor*mask,mask*_Fresnel.z);
+                c=fresnel*mask;
+                return c;
+            }
+            ENDCG
         }
     }
 }

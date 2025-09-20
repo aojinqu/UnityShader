@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/GhostScene.unity
+- path: Assets/Scenes/UGUIScene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
