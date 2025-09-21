@@ -100,6 +100,7 @@
     <None Include="Assets\ShaderToy\DefaultShaderToy.shader" />
     <None Include="Assets\Shaders\BuildIn\Globalillumination.shader" />
     <None Include="Assets\Shaders\BuildIn\XRay.shader" />
+    <None Include="Assets\Shaders\URP\UVFire.shader" />
     <None Include="Assets\Shaders\BuildIn\MyPBR.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />

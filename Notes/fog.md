@@ -103,3 +103,68 @@ $$ fogFactor=e^{-(density·z)^2}$$
     return c;
   }
 ```
+
+
+## URP下的雾效
+**步骤**
+
+1.加变体
+```#pragma multi_compile_fog```
+
+2.顶点着色器中计算雾效因子
+```half fogFactor;```
+
+```o.fogFactor = ComputeFogFactor(o.vertex.z);```
+
+3.片元着色器中混合雾效```o.rgb = MixFog(o.rgb, i.fogFactor)```
+
+
+在lighting-environment中打开雾效：
+![fog-2](./images/Fog-2.png)
+
+
+
+### 精度修饰符real
+为条件编译而生，提供跨平台精度适配方案，在性能受限平台自动降级为half精度，根据运行平台自动选择half或float精度返回雾效因子
+
+
+### Q & A
+在computeFogFactor中有这句话 z= UNITY_Z_FAR_FROM_LIPSPAE(z)，这句话什么意思，为什么要有这句话，传入的z不就已经是物体的深度了吗?
+
+UNITY_Z_0_FAR_FROM_CLIPSPACE(z) 的作用是**将裁剪空间深度值标准化为 [0,1] 范围**，其中 0 表示近裁剪面，1 表示远裁剪面。（因为某些平台使用反向Z（1=近，0=远），需要做标准处理：转换为 [0,1] 范围）
+
+**近裁剪面 (Near Clipping Plane)**
+
+- 位置：离相机最近的平面
+
+- 作用：剔除离相机太近的物体（避免渲染问题）
+
+- 默认值：通常很小（如0.3单位）
+
+**远裁剪面 (Far Clipping Plane)**
+
+- 位置：离相机最远的平面
+
+- 作用：剔除离相机太远的物体（优化性能）
+
+- 默认值：通常较大（如1000单位）
+
+      3D世界空间 → 视图空间 → 裁剪空间 → 屏幕空间
+                            ↑
+            近/远裁剪面在这里起作用
+            
+
+        相机位置
+        │
+        │   近裁剪面 (Near) ← 这里开始渲染
+        │   [可见区域：视锥体]
+        │   远裁剪面 (Far)  ← 这里停止渲染
+        │
+        ▼
+        
+```C
+// 在裁剪阶段，GPU会自动剔除：
+if (vertexCS.z < nearClipPlane || vertexCS.z > farClipPlane) {
+    discard; // 不渲染这个片段
+}
+```

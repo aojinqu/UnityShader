@@ -22,12 +22,14 @@ Shader "aj7/Commen/Checker"
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma multi_compile_fog
             // Includes
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
-
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderVariablesFunctions.hlsl" // 确保包含雾效函数 
+             
             CBUFFER_START(UnityPerMaterial)
                 float _Repeat;
                 half4 _Color;
@@ -43,21 +45,23 @@ Shader "aj7/Commen/Checker"
             struct Varyings    //vertex
             {
                 float2 uv:TEXCOORD0;
-                float4 vertexOS : SV_POSITION;
+                float4 vertexCS : SV_POSITION;  //CS:Clip Space
                 float3 worldPosWS:TEXCOORD1;
                 float3 normalWS:TEXCOORD2;  //WS:World Space
-                float3 ObjectPosOS:TEXCOORD3;  
+                float4 vertexOS:TEXCOORD3;  
+                float fogCoord:TEXCOORD4;
             };
 
             Varyings vert (Attributes v)
             {
                 Varyings o;
-                o.ObjectPosOS=v.vertexOS;
+                o.vertexOS=v.vertexOS;
                 o.uv=v.uv*_Repeat;
                 o.normalWS=TransformObjectToWorldNormal (v.normalOS);                
                 o.worldPosWS =TransformObjectToWorld(v.vertexOS);
-                o.vertexOS = TransformObjectToHClip(v.vertexOS);
-                
+                o.vertexCS = TransformObjectToHClip(v.vertexOS);
+                //雾效
+                o.fogCoord = ComputeFogFactor(o.vertexCS.z);  //传入深度值
                 return o;
             } 
 
@@ -68,9 +72,10 @@ Shader "aj7/Commen/Checker"
                 half2 uv_check= floor(i.uv*2)/2;
                 c= frac(uv_check.x+uv_check.y)*2;
                 //经典遮罩制作方法
-                half mask =i.ObjectPosOS.y+0.55;
+                half mask =i.vertexOS.y+0.55;
                 c*=mask;
                 c*=_Color;
+                c.rgb=MixFog(c,i.fogCoord);
                 return c;
             }
             ENDHLSL
@@ -109,7 +114,7 @@ Shader "aj7/Commen/Checker"
                 float3 normalWS:TEXCOORD2;  //WS:World Space
                 float3 ObjectPosOS:TEXCOORD3;
             };
-
+ 
             v2f vert (appdata v)
             {
                 v2f o;
