@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: aj7_UVFire
-  m_Shader: {fileID: 4800000, guid: 87bde058bbab8ea4fbb047f6dbdc2b15, type: 3}
+  m_Shader: {fileID: 4800000, guid: 77c868f1eaa55054ea38fd07b6ca09c6, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,13 +24,13 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 622e66c5233d9524285fb7324417ea1c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: 5028df4706921d840ad2e08505079451, type: 3}
+        m_Scale: {x: 0.02, y: 1.64}
+        m_Offset: {x: 0, y: 0.32}
     m_Ints: []
     m_Floats:
-    - _Cols: 3
-    - _FPS: 4
+    - _Cols: 4
+    - _FPS: 10
     - _Rows: 3
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

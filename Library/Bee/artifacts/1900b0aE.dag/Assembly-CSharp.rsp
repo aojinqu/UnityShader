@@ -376,6 +376,7 @@
 "Assets/Scripts/MaterialPropertyBlockTest.cs"
 "Assets/Scripts/MonsterShaderTest.cs"
 "Assets/Scripts/MyCPU.cs"
+"Assets/Scripts/MyDebug.cs"
 "Assets/Scripts/MyFirstScript.cs"
 "Assets/Scripts/MyMath.cs"
 "Assets/Scripts/MyMonsterShader.cs"
@@ -383,6 +384,7 @@
 "Assets/Scripts/PostProcessing.cs"
 "Assets/Scripts/ShaderLOD.cs"
 "Assets/Scripts/ShowTBN.cs"
+"Assets/Shaders/BuildIn/1/PandavfxGUI_V2.2.cs"
 "Assets/ShaderToy/ShaderToyManager.cs"
 -langversion:9.0
 /deterministic
