@@ -90,14 +90,15 @@ Shader "Unlit/Character"
                                 
                 fixed4 c;
                 // sample the texture
-                fixed4 tex = tex2D(_MainTex, i.uv);
+                fixed4 tex = tex2D(_MainTex, i.uv.xy);
                 c=tex*atten;
 
                 //利用变体，节省时间
                 #if _DISSOLVEENABLED_ON
                 fixed4 dissolve = tex2D(_DissolveTex, i.uv.zw); // 使用预先计算的dissolveUV
-                c += _Color;
+                c *= _Color;
                 clip(dissolve.r-_Clip);
+                //return c;
                 if(_Clip>0)
                 {
                     float4 ramp = tex1D(_RampTex, smoothstep(_Clip,_Clip+0.1,dissolve.r));

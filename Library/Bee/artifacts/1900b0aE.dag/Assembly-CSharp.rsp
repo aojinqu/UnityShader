@@ -371,6 +371,8 @@
 -analyzer:"D:/work/UnityEditor/2022.3.29f1c1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Examples/Common/RotateSelf.cs"
 "Assets/Examples/Ghost/GhostController.cs"
+"Assets/Help/mesh.cs"
+"Assets/Help/课程/Shader/VFX2.3/PandavfxGUI23.cs"
 "Assets/Scripts/FunctionTest.cs"
 "Assets/Scripts/GPUInstancing.cs"
 "Assets/Scripts/MaterialPropertyBlockTest.cs"

@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets\Examples\Ghost\GhostController.cs" />
     <Compile Include="Assets\Scripts\GPUInstancing.cs" />
+    <Compile Include="Assets\Help\mesh.cs" />
     <Compile Include="Assets\Scripts\MyDebug.cs" />
     <Compile Include="Assets\Scripts\MyMath.cs" />
     <Compile Include="Assets\Scripts\MonsterShaderTest.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Assets\ShaderToy\ShaderToyManager.cs" />
     <Compile Include="Assets\Scripts\MyMonsterShaderTest.cs" />
     <Compile Include="Assets\Scripts\MaterialPropertyBlockTest.cs" />
+    <Compile Include="Assets\Help\课程\Shader\VFX2.3\PandavfxGUI23.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -89,6 +91,7 @@
     <None Include="Assets\Shaders\BuildIn\NewUnlitShader.shader" />
     <None Include="Assets\Examples\Ghost\Ghost.shader" />
     <None Include="Assets\Examples\Common\Checker.Shader" />
+    <None Include="Assets\Help\课程\Shader\VFX2.3\Pandavfx_v2.3.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Shaders\BuildIn\Properties.shader" />
     <None Include="Assets\Shaders\BuildIn\CGIncludes\MYGI.cginc" />

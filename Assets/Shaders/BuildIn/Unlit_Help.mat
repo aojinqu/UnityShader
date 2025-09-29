@@ -16,25 +16,28 @@ Material:
   - _MAINTEXUVS_NORMAL
   - _MASKTEXUVS_NORMAL
   m_InvalidKeywords:
+  - _ADDTEXAR_ON
   - _DISSOLVETEXUVS_NORMAL
   - _DISTORTMAINTEX_ON
-  - _SOFTDISSOLVEMODE_ON
+  - _ENABLEDISSOLVE_ON
+  - _ENABLEDISTORT_ON
+  - _IFADDTEX_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _AddTexAR
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _AddTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 6ae1ad5179af94e40aae6786676a5434, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DissloveTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 00ef235de979157458d3067a2eea96dd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DissloveTexPlus:
@@ -42,19 +45,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DistortMaskTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 1bd1ec17335c743f6bb9703c0d8478ee, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DistortTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Texture: {fileID: 2800000, guid: f2e59fe0c43f3404996c672b7e2736e7, type: 3}
+        m_Scale: {x: 1.9, y: 2.53}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: ec9cb93c93d134a40a5fb28c197b65cc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 0548e306630ff40d9b9cda73b177f3a8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -63,8 +66,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AddTexAR: 0
-    - _AddTexBlend: 0
+    - _AddTexAR: 1
+    - _AddTexBlend: 0.253
     - _AddTexBlendMode: 0
     - _AddTexRo: 0
     - _AddTexUVS: 0
@@ -74,23 +77,24 @@ Material:
     - _CustomDistort: 0
     - _CustomdataDis: 0
     - _CustomdataMainTexUV: 0
-    - _DIssloveFactor: 0.5
+    - _DIssloveFactor: 0
     - _DIssloveSoft: 0.5
-    - _DIssloveWide: 0.1
+    - _DIssloveWide: 0.198
     - _DisTex_Uspeed: 0
     - _DisTex_Vspeed: 0
     - _DissolveTexUVS: 0
     - _Dissolve_rotat: 0
     - _DistortDisTex: 0
-    - _DistortFactor: 0.03
+    - _DistortFactor: 0.306
     - _DistortMainTex: 1
     - _DistortTex_Uspeed: 0.3
     - _DistortTex_Vspeed: 0.3
     - _DstBlend: 10
-    - _EnableDissolve: 0
-    - _EnableDistort: 0
+    - _EnableDissolve: 1
+    - _EnableDistort: 1
     - _EnableDistortMask: 0
-    - _IfAddTex: 0
+    - _EnableMask: 0
+    - _IfAddTex: 1
     - _IfDissolvePlus: 0
     - _MainAlpha: 1
     - _MainTexUClamp: 0
@@ -104,12 +108,12 @@ Material:
     - _Mask_Uspeed: 0
     - _Mask_Vspeed: 0
     - _Mask_rotat: 0
-    - _Mask_scale: 1
+    - _Mask_scale: 3.4
     - _ScreenAsMain: 0
-    - _SoftDissolveMode: 1
+    - _SoftDissolveMode: 0
     - _SrcBlend: 5
     m_Colors:
-    - _AddTexColor: {r: 0, g: 0, b: 0, a: 0}
+    - _AddTexColor: {r: 1, g: 1, b: 1, a: 0}
     - _AddTexRefine: {r: 1, g: 1, b: 2, a: 0}
     - _DIssloveColor: {r: 1, g: 1, b: 1, a: 1}
     - _MainColor: {r: 1, g: 1, b: 1, a: 1}

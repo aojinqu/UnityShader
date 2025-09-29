@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Help_Particle
+  m_Shader: {fileID: 4800000, guid: e7fa4ca23ad99cf48abe86b76901b115, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _ADDTEXUVS_NORMAL
+  - _MAINTEXUVS_NORMAL
+  - _MASKTEXUVS_NORMAL
+  m_InvalidKeywords:
+  - _ADDTEXAR_ON
+  - _DISSOLVETEXUVS_NORMAL
+  - _DISTORTMAINTEX_ON
+  - _MAINTEXUCLAMP_ON
+  - _MAINTEXUSER_ON
+  - _USEPARTICLEALPHA_ON
+  - _USEPARTICLECOLOR_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AddTex:
+        m_Texture: {fileID: 2800000, guid: 6ae1ad5179af94e40aae6786676a5434, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DissloveTex:
+        m_Texture: {fileID: 2800000, guid: 00ef235de979157458d3067a2eea96dd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DissloveTexPlus:
+        m_Texture: {fileID: 2800000, guid: e3c2f7ff4f6d00d4084e0b748e3dcb84, type: 3}
+        m_Scale: {x: 1, y: 1.06}
+        m_Offset: {x: 0, y: 0}
+    - _DistortMaskTex:
+        m_Texture: {fileID: 2800000, guid: 0548e306630ff40d9b9cda73b177f3a8, type: 3}
+        m_Scale: {x: 1.34, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortTex:
+        m_Texture: {fileID: 2800000, guid: f2e59fe0c43f3404996c672b7e2736e7, type: 3}
+        m_Scale: {x: 3, y: 3}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 219be15f347af68498bb5bc580f540fa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1.05, y: 1.54}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AddTexAR: 1
+    - _AddTexBlend: 0
+    - _AddTexBlendMode: 0
+    - _AddTexRo: 0
+    - _AddTexUVS: 0
+    - _AddTexUspeed: 0
+    - _AddTexVspeed: 0
+    - _Cullmode: 0
+    - _CustomDistort: 0
+    - _CustomdataDis: 0
+    - _CustomdataMainTexUV: 0
+    - _DIssloveFactor: 0.218
+    - _DIssloveSoft: 0.5
+    - _DIssloveWide: 0.213
+    - _DisTex_Uspeed: 0
+    - _DisTex_Vspeed: 0
+    - _DissolveTexUVS: 0
+    - _Dissolve_rotat: 0
+    - _DistortDisTex: 0
+    - _DistortFactor: 0.164
+    - _DistortMainTex: 1
+    - _DistortTex_Uspeed: 3
+    - _DistortTex_Vspeed: 3
+    - _DstBlend: 10
+    - _EnableDissolve: 0
+    - _EnableDistort: 0
+    - _EnableDistortMask: 0
+    - _EnableMask: 0
+    - _IfAddTex: 0
+    - _IfDissolvePlus: 0
+    - _MainAlpha: 1
+    - _MainTexUClamp: 1
+    - _MainTexUVS: 0
+    - _MainTexUseR: 1
+    - _MainTexVClamp: 0
+    - _MainTex_Uspeed: 0
+    - _MainTex_Vspeed: 0
+    - _MainTex_rotat: 0
+    - _MaskTexUVS: 0
+    - _Mask_Uspeed: 0
+    - _Mask_Vspeed: 0
+    - _Mask_rotat: 0
+    - _Mask_scale: 1.86
+    - _ParticleCustomData: 0
+    - _ScreenAsMain: 0
+    - _SoftDissolveMode: 0
+    - _SrcBlend: 5
+    - _UseParticleAlpha: 1
+    - _UseParticleColor: 1
+    m_Colors:
+    - _AddTexColor: {r: 0.8805031, g: 0.33503407, b: 0.33503407, a: 0}
+    - _AddTexRefine: {r: 1, g: 1, b: 2, a: 0}
+    - _DIssloveColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainTexRefine: {r: 1.33, g: 1, b: 1.9, a: 0}
+  m_BuildTextureStacks: []

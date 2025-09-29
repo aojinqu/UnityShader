@@ -27,7 +27,9 @@ Shader "Unlit/Help_Particle"
                 
         // Mask Texture Section
         [Header(Mask Texture)]
+        [Toggle]_EnableMask("Enable Mask", Float) = 0
         _MaskTex("Mask Texture", 2D) = "white" {}
+        [Toggle]_MaskAlphaAR("Use R Channel", Float) = 1        
         _Mask_scale("Mask Scale", Float) = 1
         
         [Header(Mask Settings)]
@@ -42,16 +44,17 @@ Shader "Unlit/Help_Particle"
         [Header(Dissolve Effect)]
         [Toggle]_EnableDissolve("Enable Dissolve", Float) = 0
         _DissloveTex("Dissolve Texture", 2D) = "white" {}
-        [HDR]_DIssloveColor("Dissolve Color", Color) = (1,1,1,1)
+        [Toggle]_DissolveAR("Use R Channel", Float) = 1
+        [HDR]_DissloveColor("Dissolve Color", Color) = (1,1,1,1)
         
         [Header(Dissolve Settings)]
         _Dissolve_rotat("Dissolve Rotation", Range(0, 360)) = 0
-        _DIssloveFactor("Dissolve Factor", Range(0, 1)) = 0.5
-        _DIssloveWide("Dissolve Width", Range(0, 1)) = 0.1
-        _DIssloveSoft("Dissolve Softness", Range(0, 1)) = 0.5
+        _DissloveFactor("Dissolve Factor", Range(0, 1)) = 0.5
+        _DissloveWide("Dissolve Width", Range(0, 1)) = 0.1
+        _DissloveSoft("Dissolve Softness", Range(0, 1)) = 0.5
         
         [Toggle]_CustomdataDis("Custom Data Dissolve", Float) = 0
-        [Toggle]_SoftDissolveMode("Soft Dissolve Mode", Float) = 1
+        [Toggle]_SoftDissolveMode("Soft Dissolve Mode", Float) = 0
         
         [KeywordEnum(Normal,Polar,Cylinder)] _DissolveTexUVS("UV Type", Float) = 0
         _DisTex_Uspeed("U Speed", Float) = 0
@@ -102,7 +105,7 @@ Shader "Unlit/Help_Particle"
         [Header(Particle System)]
         [Toggle]_UseParticleAlpha("Use Particle Alpha", Float) = 1
         [Toggle]_UseParticleColor("Use Particle Color", Float) = 1
-        [Toggle]_ParticleCustomData("Use Custom Particle Data", Float) = 0
+        //[Toggle]_ParticleCustomData("Use Custom Particle Data", Float) = 0
         
         [HideInInspector] _texcoord("", 2D) = "white" {}
     }
@@ -187,22 +190,23 @@ Shader "Unlit/Help_Particle"
             float _MainTex_Vspeed;
 
             // Mask Properties
+            float _EnableMask;
             float _Mask_scale;
             float4 _MaskTex_ST;
-            float _MaskAlphaRA;
+            float _MaskAlphaAR;
             float _Mask_rotat;
             float _Mask_Uspeed;
             float _Mask_Vspeed;
             
             // Dissolve Properties
             float _EnableDissolve;
-            float4 _DIssloveColor;
+            float4 _DissloveColor;
             float4 _DissloveTex_ST;
             float _DissolveAR;
             float _Dissolve_rotat;
-            float _DIssloveFactor;
-            float _DIssloveWide;
-            float _DIssloveSoft;
+            float _DissloveFactor;
+            float _DissloveWide;
+            float _DissloveSoft;
             float _IfDissolvePlus;
             float4 _DissloveTexPlus_ST;
             float _CustomdataDis;
@@ -238,7 +242,6 @@ Shader "Unlit/Help_Particle"
             // 粒子系统属性
             float _UseParticleAlpha;
             float _UseParticleColor;
-            float _ParticleCustomData;
             
             // UV Rotation Function
             float2 RotateUV(float2 uv, float rotation, float2 center)
@@ -286,6 +289,7 @@ Shader "Unlit/Help_Particle"
             // Distortion Function
             float2 ApplyDistortion(float2 uv, float2 distortUV)
             {
+                _DistortTexAR=1;
                 if (_EnableDistort < 0.5) return uv;
                 
                 float2 distort = ScrollUV(distortUV, _DistortTex_Uspeed, _DistortTex_Vspeed);
@@ -308,22 +312,22 @@ Shader "Unlit/Help_Particle"
                 if (_EnableDissolve < 0.5) return 1.0;
                 
                 // 使用粒子自定义数据或材质参数
-                float dissolveFactor = _CustomdataDis > 0.5 ? customDissolve : _DIssloveFactor;
+                float dissolveFactor = _CustomdataDis > 0.5 ? customDissolve : _DissloveFactor;
                 
                 float2 dissUV = ScrollUV(dissolveUV, _DisTex_Uspeed, _DisTex_Vspeed);
                 dissUV = RotateUV(dissUV, _Dissolve_rotat, float2(0.5, 0.5));
                 
-                float4 dissolveTex = tex2Dlod(_DissloveTex, float4(dissUV, 0, 0));
+                float4 dissolveTex = tex2D(_DissloveTex, float4(dissUV, 0, 0));
                 float dissolveValue = _DissolveAR > 0.5 ? dissolveTex.r : dissolveTex.a;
                 
                 if (_IfDissolvePlus > 0.5)
                 {
-                    float4 plusTex = tex2Dlod(_DissloveTexPlus, float4(dissUV, 0, 0));
+                    float4 plusTex = tex2D(_DissloveTexPlus, float4(dissUV, 0, 0));
                     dissolveValue = (dissolveValue + (_DissolveAR > 0.5 ? plusTex.r : plusTex.a)) * 0.5;
                 }
                 
                 if (_SoftDissolveMode > 0.5)
-                    return smoothstep(dissolveFactor - _DIssloveSoft, dissolveFactor + _DIssloveSoft, dissolveValue);
+                    return smoothstep(dissolveFactor - _DissloveSoft, dissolveFactor + _DissloveSoft, dissolveValue);
                 else
                     return step(dissolveFactor, dissolveValue);
             }
@@ -360,7 +364,7 @@ Shader "Unlit/Help_Particle"
                 float2 baseUV = _CustomdataMainTexUV > 0.5 ? i.uv2 : i.uv;
                 baseUV = ClampUV(baseUV, _MainTexUClamp, _MainTexVClamp);
                 
-                // 从粒子自定义数据获取溶解参数
+                // 从粒子自定义数据获取溶解参数!!错误原因
                 float particleDissolve = i.uv2.x; // 通常uv2.x用于溶解，uv2.y用于其他参数
                 
                 // Apply distortion
@@ -376,6 +380,7 @@ Shader "Unlit/Help_Particle"
                 mainUV = RotateUV(mainUV, _MainTex_rotat, float2(0.5, 0.5));
                 
                 fixed4 mainTex = tex2D(_MainTex, mainUV);
+
                 float mainAlpha = _MainTexUseR > 0.5 ? mainTex.r : mainTex.a;
                 float3 mainColor = ApplyRefine(mainTex.rgb, _MainTexRefine);
                 
@@ -418,8 +423,9 @@ Shader "Unlit/Help_Particle"
                 maskUV = RotateUV(maskUV, _Mask_rotat, float2(0.5, 0.5));
 
                 fixed4 maskTex = tex2D(_MaskTex, maskUV);
-                float maskAlpha = _MaskAlphaRA > 0.5 ? maskTex.r : maskTex.a;
+                float maskAlpha = _MaskAlphaAR > 0.5 ? maskTex.r : maskTex.a;
                 maskAlpha *= _Mask_scale;
+                maskAlpha =_EnableMask < 0.5 ? 1.0 : maskAlpha;
                 
                 // Dissolve Effect (使用粒子自定义数据)
                 float2 dissolveUV = _DistortDisTex > 0.5 ? finalUV : baseUV;
@@ -427,7 +433,7 @@ Shader "Unlit/Help_Particle"
                 float dissolve = ApplyDissolve(dissolveUV, dissolveUV, particleDissolve);
                 
                 if (dissolve < 0.5)
-                    finalColor.rgb = lerp(finalColor.rgb, _DIssloveColor.rgb, _DIssloveColor.a);
+                    finalColor.rgb = lerp(finalColor.rgb, _DissloveColor.rgb, _DissloveColor.a);
                 
                 // 应用粒子系统数据
                 if (_UseParticleColor > 0.5)

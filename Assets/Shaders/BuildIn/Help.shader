@@ -31,6 +31,7 @@ Shader "Unlit/Help"
                 
         // Mask Texture Section
         [Header(Mask Texture)]
+        [Toggle]_EnableMask("Enable Mask", Float) = 0
         _MaskTex("Mask Texture", 2D) = "white" {}
         _Mask_scale("Mask Scale", Float) = 1
         
@@ -57,7 +58,7 @@ Shader "Unlit/Help"
         _DIssloveSoft("Dissolve Softness", Range(0, 1)) = 0.5
         
         [Toggle]_CustomdataDis("Custom Data Dissolve", Float) = 0
-        [Toggle]_SoftDissolveMode("Soft Dissolve Mode", Float) = 1
+        [Toggle]_SoftDissolveMode("Soft Dissolve Mode", Float) = 0
         
         [KeywordEnum(Normal,Polar,Cylinder)] _DissolveTexUVS("UV Type", Float) = 0
         _DisTex_Uspeed("U Speed", Float) = 0
@@ -179,6 +180,7 @@ Shader "Unlit/Help"
 
 
             // Mask Properties
+            float _EnableMask;
             float _Mask_scale;
             float4 _MaskTex_ST;
             float _MaskAlphaRA;
@@ -416,6 +418,7 @@ Shader "Unlit/Help"
                 fixed4 maskTex = tex2D(_MaskTex, maskUV);
                 float maskAlpha = _MaskAlphaRA > 0.5 ? maskTex.r : maskTex.a;
                 maskAlpha *= _Mask_scale;
+                maskAlpha=_EnableMask < 0.5 ?1:maskAlpha;
                 
                 // Dissolve Effect
                 float2 dissolveUV = _DistortDisTex > 0.5 ? finalUV : baseUV;
