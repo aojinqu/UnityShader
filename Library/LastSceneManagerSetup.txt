@@ -1,9 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/HelpScene.unity
-  isLoaded: 1
-  isActive: 0
-  isSubScene: 0
-- path: "Assets/Help/\u7EC3\u4E60/\u71D5\u672C\u7684\u5FC3\u6001/\u71D5\u672C\u7684\u5FC3\u6001.unity"
+- path: Assets/Scenes/FogScene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
