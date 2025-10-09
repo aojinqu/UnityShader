@@ -85,31 +85,10 @@ Shader "aj7/URP/Sequence"
             //顶点着色器
             Varyings vert(Attributes v)
             {
-                Varyings o = (Varyings)0;
-
-
-
-                float3 objectWorldPos = GetObjectToWorldMatrix()._m03_m13_m23;
-                float3 scale = float3(
-                    length(GetObjectToWorldMatrix()._m00_m10_m20),
-                    length(GetObjectToWorldMatrix()._m01_m11_m21),
-                    length(GetObjectToWorldMatrix()._m02_m12_m22)
-                );
-
-                float3 viewDir = normalize(_WorldSpaceCameraPos - objectWorldPos);
-                float3 upDir = abs(dot(viewDir, float3(0, 1, 0))) > 0.999 ? float3(0, 0, 1) : float3(0, 1, 0);
-                float3 rightDir = normalize(cross(upDir, viewDir));
-                upDir = normalize(cross(viewDir, rightDir));
-
-                float3 newVertex = objectWorldPos + 
-                    input.positionOS.x * rightDir * scale.x + 
-                    input.positionOS.y * upDir * scale.y;
-
-
-                    
+                Varyings o = (Varyings)0;           
                 //构建旋转后的基向量在模型本地空间下的坐标
                 //计算相机世界坐标到本地空的向量单位化
-                float3 viewDir =normalize(mul(GetWorldToObjectMatrix(),float4(_WorldSpaceCameraPos.xyz,1)));  //这里不对！！！一定要保重w分量是1，否则在计算的时候就会错
+                float3 viewDir =normalize(mul(GetWorldToObjectMatrix(),float4(_WorldSpaceCameraPos.xyz,1)));  //这里不对！！！一定要保重w分量是1，否则在计算的时候会给float3的这个pos自动补全一个w=0.导致计算错误
                 viewDir.y*=_BillboardType;  //判断是否为垂直billboard
                 float3 upDir=float3(0,1,0);
                 //P.S 模型的本地空间是左手坐标系，所以这里是rightDir
@@ -216,6 +195,7 @@ Shader "aj7/URP/Sequence"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            int _BillboardType;
             
             //顶点着色器的输入（模型的数据信息）
             struct appdata
@@ -259,9 +239,26 @@ Shader "aj7/URP/Sequence"
             v2f vert(appdata v)
             {
                 v2f o = (v2f)0;
+                //构建旋转后的基向量在模型本地空间下的坐标
+                //计算相机世界坐标到本地空的向量单位化
+                float3 viewDir =normalize(mul(unity_ObjectToWorld,float4(_WorldSpaceCameraPos.xyz,1)));  //这里不对！！！一定要保重w分量是1，否则在计算的时候会给float3的这个pos自动补全一个w=0.导致计算错误
+                viewDir.y*=_BillboardType;  //判断是否为垂直billboard
+                float3 upDir=float3(0,1,0);
+                //P.S 模型的本地空间是左手坐标系，所以这里是rightDir
+                float3 rightDir=normalize(cross(viewDir,upDir));
+                upDir=normalize(cross(rightDir,viewDir));
+                //矩阵乘法的形式
+                float4x4 M ={
+                rightDir.x,upDir.x,viewDir.x,0,
+                rightDir.y,upDir.y,viewDir.y,0,
+                rightDir.z,upDir.z,viewDir.z,0,
+                0,0,0,1
+                };
+                float3 newVertex=mul(M,v.positionOS);
+                //向量乘法的形式
+                //newVertex=rightDir*v.positionOS.x+upDir*v.positionOS.y+viewDir*v.positionOS.z;
 
-                float3 positionWS = mul(unity_ObjectToWorld,v.positionOS);
-                o.positionCS = UnityObjectToClipPos(positionWS);
+                o.positionCS = UnityObjectToClipPos(newVertex);
                 o.uv=v.uv;
                 return o;
             }
@@ -279,7 +276,7 @@ Shader "aj7/URP/Sequence"
                 
                 c=mainTex*_Color;
                 //UseR
-                //c.rgb=c.a;
+                c.rgb=c.a;
                 return c;
             }
             ENDHLSL

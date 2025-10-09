@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/FogScene.unity
+- path: Assets/Scenes/TmpScene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
