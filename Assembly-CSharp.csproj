@@ -89,12 +89,14 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Shaders\BuildIn\framework.shader" />
     <None Include="Assets\Shaders\BuildIn\NewUnlitShader.shader" />
+    <None Include="Assets\Shaders\URP\Depth.shader" />
     <None Include="Assets\Examples\Ghost\Ghost.shader" />
     <None Include="Assets\Examples\Common\Checker.Shader" />
     <None Include="Assets\Help\课程\Shader\VFX2.3\Pandavfx_v2.3.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Shaders\BuildIn\Properties.shader" />
     <None Include="Assets\Shaders\BuildIn\CGIncludes\MYGI.cginc" />
+    <None Include="Assets\Shaders\URP\Hexagon.shader" />
     <None Include="Assets\Shaders\BuildIn\Fog.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
@@ -986,12 +988,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Burst.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.Burst">
       <HintPath>Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Burst.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.PlasticSCM.Editor">
@@ -1128,6 +1130,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="taecg.shaderReference.Editor.csproj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <ItemGroup>

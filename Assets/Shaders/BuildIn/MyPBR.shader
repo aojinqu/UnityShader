@@ -185,7 +185,7 @@ Shader"aj7/MyPBR"
                 UNITY_APPLY_FOG(_unity_fogCoord, c); // apply fog
                 UNITY_OPAQUE_ALPHA(c.a);// 设定a为1
                 return c;
-}
+        }
 
 
             ENDCG

@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/TmpScene.unity
+- path: Assets/Scenes/URPDepth.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

@@ -63,3 +63,32 @@ void Update()
 ```
   ![shadows-3](./images/Shadows-3.png)
   ![shadows-2](./images/Shadows-2.png)
+
+### URP下的深度图
+URP下深度图会最大程度合批，通常场景深度只需一个绘制批次。
+
+对比Built-in管线:
+- Built-in需要ShadowCaster Pass单独渲染每个物体
+- URP性能更优，不会渲染多余Pass
+  ![shadows-4](./images/Shadows-4.png)
+
+
+### BuildIn下的深度图
+实现步骤：
+场景对象必须包含ShadowCaster Pass
+通过脚本开启相机深度图模式
+
+```C#
+case Quality.High:
+    Shader.globalMaximumLOD = 600;
+    Camera.main.depthTextureMode = DepthTextureMode.Depth;//开启深度图
+break;
+```
+  ![shadows-5](./images/Shadows-5.png)
+
+### Q&A
+build-in管线和urp管线中，哪些物体会写入深度图?
+
+- build-in管线是shader中，必须有ShadowCaster这个pass，而且该物体用的必须是renderQueue小于2500的材质球。
+
+- urp管线是只需renderQueue小于2500的材质球的物体都会写入深度图，shader无需添加ShadowCaster这个pass。

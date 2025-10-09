@@ -23,7 +23,8 @@ public class ShaderLOD : MonoBehaviour
         switch(theQuality)
         {
             case Quality.High:
-            Shader.globalMaximumLOD=600;
+                Shader.globalMaximumLOD = 600;
+                Camera.main.depthTextureMode = DepthTextureMode.Depth;//开启深度图
             break;
             case Quality.Medium:
             Shader.globalMaximumLOD=400;

@@ -10,9 +10,9 @@ Shader "aj7/URP/SimplestUnlit"
     {
         Tags
         {
-            "RenderPipeline"="UniverslPipelie"
+            "RenderPipeline"="UniversalPipeline"
             "RenderType"="Opaque"
-            "Queuqe"="Geometry+0"
+            "Queque"="Geometry+0"
         }
         Pass
         {
