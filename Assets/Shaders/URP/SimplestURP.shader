@@ -10,9 +10,9 @@ Shader "aj7/URP/SimplestUnlit"
     {
         Tags
         {
-            "RenderPipeline"="UniversalPipeline"
-            "RenderType"="Opaque"
-            "Queque"="Geometry+0"
+            "RenderPipeline" = "UniversalPipeline"
+            "RenderType" = "Opaque"
+            "Queue" = "Geometry"
         }
         Pass
         {
@@ -46,14 +46,14 @@ Shader "aj7/URP/SimplestUnlit"
             half4 _Color;
             CBUFFER_END
 
-            //sampler2D _MainTex;
-            TEXTURE2D(_MainTex);    //纹理的定义，如果是编译到GLES2.0平台，则相当于sampler2D _MainTex;否则就相当于Texture2D _MainTex;
-            float4 _MainTex_ST;
-            // SAMPLER(sampler_MainTex);  //采样器的定义，如果是编译到GLES2.0平台，默认相当于空，否则就相当于samplerState sampler_MainTex;
-            
+
             //#define smp sampler_MainTex
-            #define smp _linear_clampU_mirror 
-            SAMPLER(smp);
+            //#define smp _linear_clampU_mirror 
+
+            TEXTURE2D(_MainTex);    //纹理的定义，如果是编译到GLES2.0平台，则相当于sampler2D _MainTex;否则就相当于Texture2D _MainTex;
+            //SAMPLER(smp);
+            SAMPLER(sampler_MainTex);  //采样器的定义，如果是编译到GLES2.0平台，默认相当于空，否则就相当于samplerState sampler_MainTex;
+            float4 _MainTex_ST;
 
             //顶点着色器的输入（模型的数据信息）
             struct Attributes
@@ -76,12 +76,13 @@ Shader "aj7/URP/SimplestUnlit"
                 float3 positionWS = TransformObjectToWorld(v.positionOS);
                 o.positionCS = TransformWorldToHClip(positionWS);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.uv = v.uv;
                 return o;
             }
             half4 frag (Varyings i):SV_Target
             {
                 half4 c;
-                half4 mainTex=SAMPLE_TEXTURE2D(_MainTex,smp,i.uv);
+                half4 mainTex=SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.uv);
                 c=mainTex*_Color;
                 return c;
             }
