@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/URPDepth.unity
+- path: Assets/Scenes/Demical.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
