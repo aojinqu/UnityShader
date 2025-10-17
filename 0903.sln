@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmplifyShaderEditor", "AmplifyShaderEditor.csproj", "{02D8EE39-9CAF-31B2-B1B5-FBE025938113}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "taecg.shaderReference.Editor", "taecg.shaderReference.Editor.csproj", "{0A3711F0-CF48-1F2B-3862-8042DE3A5016}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{74D8D9B3-5D3F-9C25-E515-BF2C90014581}"
@@ -11,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02D8EE39-9CAF-31B2-B1B5-FBE025938113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02D8EE39-9CAF-31B2-B1B5-FBE025938113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02D8EE39-9CAF-31B2-B1B5-FBE025938113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02D8EE39-9CAF-31B2-B1B5-FBE025938113}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A3711F0-CF48-1F2B-3862-8042DE3A5016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A3711F0-CF48-1F2B-3862-8042DE3A5016}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A3711F0-CF48-1F2B-3862-8042DE3A5016}.Release|Any CPU.ActiveCfg = Release|Any CPU

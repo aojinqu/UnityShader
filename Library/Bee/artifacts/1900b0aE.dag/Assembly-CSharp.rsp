@@ -119,6 +119,7 @@
 -define:ENABLE_TIMELINE
 -define:ENABLE_LEGACY_INPUT_MANAGER
 -define:TEXTCORE_FONT_ENGINE_1_5_OR_NEWER
+-define:AMPLIFY_SHADER_EDITOR
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
 -r:"D:/work/UnityEditor/2022.3.29f1c1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
@@ -328,6 +329,7 @@
 -r:"D:/work/UnityEditor/2022.3.29f1c1/Editor/Data/NetStandard/ref/2.1.0/netstandard.dll"
 -r:"Library/PackageCache/com.unity.testtools.codecoverage@1.2.5/lib/ReportGenerator/ReportGeneratorMerged.dll"
 -r:"Library/PackageCache/com.unity.visualscripting@1.9.4/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/AmplifyShaderEditor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/PPv2URPConverters.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/taecg.shaderReference.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Burst.Editor.ref.dll"
@@ -372,6 +374,7 @@
 -analyzer:"D:/work/UnityEditor/2022.3.29f1c1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Examples/Common/RotateSelf.cs"
 "Assets/Examples/Ghost/GhostController.cs"
+"Assets/Examples/GroundDisappear/GroundDisappear.cs"
 "Assets/Help/mesh.cs"
 "Assets/Help/课程/Shader/VFX2.3/PandavfxGUI23.cs"
 "Assets/Scripts/FunctionTest.cs"
