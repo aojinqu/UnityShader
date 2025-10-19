@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Bridge 1
+  m_Shader: {fileID: 4800000, guid: fd79586dda6459b4eae704a7fcda4648, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _DISAPPEAR_ON
+  m_InvalidKeywords: []
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _Disappear: 1
+    - _FadeRange: 2.07
+    - _FadeRange1: 2
+    - _Radius: 5.18
+    - __dirty: 0
+    m_Colors:
+    - _StartPos: {r: 2.33, g: 1.25, b: 0, a: 0}
+    - _StartPos1: {r: -3.05, g: -17.02, b: 0, a: 0}
+    - _outlineColor: {r: 0, g: 0.65126723, b: 0.92941177, a: 0}
+  m_BuildTextureStacks: []

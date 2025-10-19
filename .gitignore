@@ -1,44 +1,17 @@
-# 忽略所有文件
-*
-# 忽略
-Assets/AmplifyShaderEditor/
+# 忽略所有内容
+/*
 
-# 但保留这些目录和文件
-!Assets/
-!Notes/
-!HTMLs/
+# 保留这些文件夹
+!/Assets/
+!/HTMLs/
+!/Notes/
 
-# 确保.gitignore本身不被忽略
-!.gitignore
-!.README.md
+# 在Assets中忽略AmplifyShaderEditor文件夹
+/Assets/AmplifyShaderEditor/
 
-
-
-# 忽略Unity生成的文件
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-[Ll]ogs/
-/[Pp]ackages
-Library/
-Temp/
-# 忽略项目文件
-/*.csproj
-/*.sln
-/*.suo
-/*.user
-/*.userprefs
-
-# 忽略VS Code设置
-.vscode/
-
-# 忽略包目录（通常通过包管理器恢复）
-/[Pp]ackages/
-
-# 忽略自动生成的文件
-AssetStoreTools/
-
-# 忽略macOS系统文件
-.DS_Store
+# 允许根目录下的必要文件（如解决方案、项目文件等）
+!/.gitignore
+!/0903.sln
+!/README.md
+!/Assembly-CSharp-Editor.csproj
+!/Assembly-CSharp.csproj
