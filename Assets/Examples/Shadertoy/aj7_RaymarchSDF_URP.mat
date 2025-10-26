@@ -7,14 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Bridge 1
-  m_Shader: {fileID: 4800000, guid: 22d980cb7a9a9b6498e96202595f3310, type: 3}
+  m_Name: aj7_RaymarchSDF_URP
+  m_Shader: {fileID: 4800000, guid: 48324c64eebae054eadf809b4053adda, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _DISAPPEAR_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 0
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -23,16 +22,15 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats:
-    - _Disappear: 1
-    - _FadeRange: 0.58
-    - _FadeRange1: 2
-    - _Radius: 4.25
-    - __dirty: 0
+    m_Floats: []
     m_Colors:
-    - _StartPos: {r: 2.33, g: 1.25, b: 0, a: 0}
-    - _StartPos1: {r: -3.05, g: -17.02, b: 0, a: 0}
-    - _outlineColor: {r: 1, g: 0.9571707, b: 0, a: 0}
+    - _Mouse: {r: 1408.6666, g: 582.3333, b: 0, a: 0}
+    - _Resolution: {r: 881, g: 469, b: 0, a: 0}
+    - _TimeParams: {r: 8.270914, g: 165.41827, b: 330.83655, a: 496.25482}
   m_BuildTextureStacks: []

@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class Bridge : MonoBehaviour
 {
+    public GameObject bridge;
+
     public Vector4[] StartPosArray;
-    
+    private Material mat;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        bridge = GameObject.Find("Bridge");
+
+        mat = bridge.GetComponent<MeshRenderer>().sharedMaterial;
+        mat.SetVectorArray("StartPosArray", StartPosArray);
+        mat.SetInt("StartPosCount", StartPosArray.Length);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

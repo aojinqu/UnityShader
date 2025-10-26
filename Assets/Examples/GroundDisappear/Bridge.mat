@@ -21,12 +21,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Bridge
-  m_Shader: {fileID: 4800000, guid: fd79586dda6459b4eae704a7fcda4648, type: 3}
+  m_Shader: {fileID: 4800000, guid: 22d980cb7a9a9b6498e96202595f3310, type: 3}
   m_Parent: {fileID: 2100000, guid: 72b2878874760624689567e3804ee14d, type: 2}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _EMISSION
+  m_ValidKeywords:
+  - _DISAPPEAR_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -41,6 +41,7 @@ Material:
     m_Floats:
     - _FadeRange: 1.61
     - _Radius: 9.8
+    - __dirty: 0
     m_Colors:
     - _StartPos: {r: 0, g: 0, b: 0, a: 0}
     - _StartPos1: {r: -2.83, g: -20.82, b: 0, a: 0}

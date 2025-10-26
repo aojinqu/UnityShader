@@ -8,6 +8,11 @@
 
 # 在Assets中忽略AmplifyShaderEditor文件夹
 /Assets/AmplifyShaderEditor/
+/Library/
+/Temp/
+/Obj/
+/Logs/
+/UserSettings/
 
 # 允许根目录下的必要文件（如解决方案、项目文件等）
 !/.gitignore
