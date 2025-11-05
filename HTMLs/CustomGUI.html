@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>CustomEditor GUI</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h3 id="customeditor-gui">CustomEditor GUI</h3>
+<p><strong>其实GUI的绘制相当于写前端，在这里你可以自定义变量出现的位置、长度、大小。</strong></p>
+<p>想要自己在材质面板上做定义，需要：</p>
+<p>1.在shader尾部添加<code>CustomEditor &quot;CustomMaterialGUI&quot;</code></p>
+<p>此时再看材质面板会多出一些东西
+<img src="file:///e:\test\unity\0903\Notes\images\Editor-1.png" alt="GUI-1"></p>
+<p>2.在脚本中重绘GUI</p>
+<pre><code class="language-C#"><span class="hljs-keyword">using</span> UnityEditor;
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">CustomMaterialGUI</span> : <span class="hljs-title">ShaderGUI</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnGUI</span>(<span class="hljs-params">MaterialEditor materialEditor, MaterialProperty[] properties</span>)</span>
+    {
+        <span class="hljs-comment">//绘制原先的base面板</span>
+        <span class="hljs-keyword">base</span>.OnGUI(materialEditor, properties);
+    }
+}
+</code></pre>
+<p><strong>P.S. 脚本放置目录</strong></p>
+<p>目录规范,必须将GUI脚本放置在Editor文件夹内
+特殊作用：</p>
+<ul>
+<li>仅用于编辑器功能扩展</li>
+<li>不会被打包进最终游戏</li>
+<li>Unity保留目录具有特殊处理逻辑</li>
+</ul>
+<pre><code class="language-C#">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnGUI</span>(<span class="hljs-params">MaterialEditor materialEditor, MaterialProperty[] properties</span>)</span>
+    {
+        <span class="hljs-comment">//base.OnGUI(materialEditor, properties);</span>
+        <span class="hljs-comment">//获取相应属性</span>
+        floatProp = FindProperty(<span class="hljs-string">&quot;_Float&quot;</span>, properties);
+        <span class="hljs-comment">//绘制相应属性</span>
+        materialEditor.FloatProperty(floatProp, <span class="hljs-string">&quot;FloatName&quot;</span>);
+        <span class="hljs-comment">//滑动条版本</span>
+        materialEditor.RangeProperty(floatProp, <span class="hljs-string">&quot;FloatName&quot;</span>);
+    }
+
+</code></pre>
+<h3 id="把vector拆开展示">把vector拆开展示</h3>
+<p>方法是重新申明一个变量然后覆盖给vector</p>
+<pre><code class="language-C#">        <span class="hljs-comment">//Make a text field for entering integers,注意一定要写返回值，不然拿不到这个数重新赋值</span>
+        vectorX = EditorGUILayout.IntField(<span class="hljs-string">&quot;VetcorX&quot;</span>, vectorX);
+        <span class="hljs-comment">//重新赋值给vectorprop材质</span>
+        UnityEngine.Vector4 Vector4_new = <span class="hljs-keyword">new</span> UnityEngine.Vector4(vectorX, vectorY, vectorZ, vectorW);
+        vectorProp.vectorValue = Vector4_new;
+</code></pre>
+<h3 id="滑动条和范围滑动条">滑动条和范围滑动条</h3>
+<p>都需要再获取之后同上，重新赋值。</p>
+<pre><code class="language-C#">        <span class="hljs-comment">//滑动条版本 </span>
+        vectorY = EditorGUILayout.Slider(<span class="hljs-string">&quot;VetcorY&quot;</span>, vectorY, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>);
+</code></pre>
+<pre><code class="language-C#">        <span class="hljs-comment">//范围滑动条版本</span>
+        EditorGUILayout.MinMaxSlider(<span class="hljs-string">&quot;VectorZW&quot;</span>, <span class="hljs-keyword">ref</span> vectorZ, <span class="hljs-keyword">ref</span> vectorW, <span class="hljs-number">0f</span>, <span class="hljs-number">1f</span>);
+
+</code></pre>
+<p><img src="file:///e:\test\unity\0903\Notes\images\Editor-2.png" alt="GUI-2"></p>
+
+            
+            
+        </body>
+        </html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x5e8f;&#x5217;&#x52a8;&#x753b;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="序列动画">序列动画</h1>
+<p><strong>关键</strong>
+需要理解uv是从左下角开始算的，如图采样(0.9,0.2)得到的是9的粉色</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\UVSequence-1.png" alt="Sequence-1"></p>
+<p>接着需要通过一个线性映射来定位到我们想要的块<code>GetFrameIndex()</code>，然后计算：</p>
+<ol>
+<li>块的大小</li>
+<li>块的offset</li>
+</ol>
+<pre><code class="language-C"><span class="hljs-comment">// 先获取小图片的序号。这里的关键是floor，第二则是使用int来防止精度问题</span>
+<span class="hljs-type">int</span> <span class="hljs-title function_">GetFrameIndex</span><span class="hljs-params">()</span>
+{
+    <span class="hljs-comment">//half total = max(1, _Cols * _Rows);</span>
+    <span class="hljs-comment">//关键，通过floor来织造一块时间停顿在一个图像上，然后立刻跳转，而不是缓慢平移</span>
+    <span class="hljs-type">int</span> total = (<span class="hljs-type">int</span>)(_Cols * _Rows);
+    total = max(<span class="hljs-number">1</span>, total);
+    <span class="hljs-type">int</span> idx = (<span class="hljs-type">int</span>)<span class="hljs-built_in">floor</span>(_Time.y * max(<span class="hljs-number">1</span>, _FPS)) % total;
+    
+    <span class="hljs-keyword">return</span> idx; 
+}    
+</code></pre>
+<pre><code class="language-C"><span class="hljs-comment">//将UV映射到某一帧</span>
+float2 <span class="hljs-title function_">ComputeUV</span><span class="hljs-params">(float2 uv,<span class="hljs-type">int</span> frameIndex)</span>
+{
+    <span class="hljs-comment">//Frame:[0,row*col-1].这里[0,8]</span>
+    <span class="hljs-type">int</span> col = <span class="hljs-type">int</span>(frameIndex % _Cols);
+    <span class="hljs-type">int</span> row = <span class="hljs-type">int</span>(frameIndex / _Cols); <span class="hljs-comment">//关键！！这句不能用floor，会有精度问题导致row值错误</span>
+    <span class="hljs-comment">//0,0  1,0  2,0  0,1  1,1  2,1  0,2  1,2  2,2</span>
+    <span class="hljs-comment">// 纹理帧从左上到右下排布，Unity UV 原点在左下，则可选择翻转行索引</span>
+    <span class="hljs-comment">//0,2  1,2  2,2  0,1  1,1  2,1  0,0  1,0  2,0</span>
+    row = _Rows - <span class="hljs-number">1</span> - row;
+    float2 frameScale = float2(<span class="hljs-number">1</span>/_Cols,<span class="hljs-number">1</span>/_Rows);   
+    float2 frameOffset=float2(col,row)*frameScale;
+
+    <span class="hljs-comment">// 这里假设输入 uv 在 0~1 内；若有平铺，可用 frac(uv)</span>
+    float2 uvInFrame = uv; 
+    uvInFrame= uvInFrame * frameScale + frameOffset;
+
+    <span class="hljs-keyword">return</span> uvInFrame;
+
+}
+</code></pre>
+<p>最后整合起来</p>
+<pre><code class="language-C">half4 <span class="hljs-title function_">frag</span> <span class="hljs-params">(Varyings i)</span>:SV_Target
+{
+  half4 c;
+  <span class="hljs-type">int</span> frameIndex=GetFrameIndex();
+
+  float2 uvFrame =ComputeUV(i.uv,frameIndex);
+  <span class="hljs-comment">//return uvFrame.y/4;</span>
+  half4 mainTex=SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,uvFrame);
+  
+  c=mainTex*_Color;
+  <span class="hljs-comment">//UseR</span>
+  c.rgb = _UseR&gt;<span class="hljs-number">0.5</span> ? c.a : c.rgb;
+  <span class="hljs-keyword">return</span> c;
+}
+</code></pre>
+<h3 id="billboard">BillBoard</h3>
+<p>实现移动画面面片始终朝向摄像机</p>
+<p>思路：改变物体的本地坐标，让物体始终旋转对着相机。其实只要找出物体的基坐标系如何旋转了即可。</p>
+<p>做完这个本地空间下的变换，再放到世界空间，这样才能避免受到物体本身旋转、缩放的影响。</p>
+<p><img src="file:///e:\test\unity\0903\Notes\images\UVSequence-4.png" alt="Sequence-4"></p>
+<p>计算步骤:</p>
+<ol>
+<li>获取模型本地坐标系的基向量(i,j,k)</li>
+<li>计算相机视线方向向量</li>
+<li>通过向量运算确定使面片朝向相机的新基向量
+应用顶点变换公式：</li>
+</ol>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>P</mi><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msub><mo>=</mo><msup><mi>i</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>∗</mo><msub><mi>P</mi><mi>x</mi></msub><mo>+</mo><msup><mi>j</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>∗</mo><msub><mi>P</mi><mi>y</mi></msub><mo>+</mo><msup><mi>k</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>∗</mo><msub><mi>P</mi><mi>z</mi></msub></mrow><annotation encoding="application/x-tex">P_{new}=i&#x27;*P_x +j&#x27;*P_y+k&#x27;*P_z 
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8019em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9963em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8019em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.04398em;">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<pre><code class="language-C">float4 M ={
+rightDir.x,upDir.x,viewDir.x,<span class="hljs-number">0</span>,
+rightDir.y,upDir.y,viewDir.y,<span class="hljs-number">0</span>,
+rightDir.z,upDir.z,viewDir.z,<span class="hljs-number">0</span>,
+<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>
+}
+float3 newVertex=mul(M,v.positionOS);
+<span class="hljs-comment">//向量乘法的形式</span>
+<span class="hljs-comment">//newVertex=rightDir*v.positionOS.x+upDir*v.positionOS.y+viewDir*v.positionOS.z;</span>
+
+o.positionCS = TransformObjectToHClip(newVertex);
+</code></pre>
+<p>还可以实现不同轴向下的Billboard</p>
+<pre><code class="language-C">viewDir.y*=_BillboardType;  <span class="hljs-comment">//判断是否为垂直billboard</span>
+</code></pre>
+<p><img src="file:///e:\test\unity\0903\Notes\images\UVSequence-5.png" alt="Sequence-5"></p>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+            
+        </body>
+        </html>

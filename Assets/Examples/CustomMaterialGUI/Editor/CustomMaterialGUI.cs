@@ -43,7 +43,7 @@ public class CustomMaterialGUI : ShaderGUI
         UnityEngine.Vector4 Vector4_new = new UnityEngine.Vector4(vectorX, vectorY, vectorZ, vectorW);
         vectorProp.vectorValue = Vector4_new;
 
-        baseMapProp = FindProperty("_BaseMap", properties);
+        baseMapProp = FindProperty("_MainTex", properties);
         materialEditor.TextureProperty(baseMapProp, "纹理(materialEditor)");
         materialEditor.TexturePropertySingleLine(new GUIContent("单行纹理(materialEditor)"), baseMapProp);
         materialEditor.TexturePropertyTwoLines(new GUIContent("两行纹理(materialEditor)"), baseMapProp, colorProp, new GUIContent("第二行属性"), vectorProp);

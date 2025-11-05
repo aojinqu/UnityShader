@@ -9,6 +9,8 @@ Shader效果存放在/Assets/Shaders中
 ### 一、基础坐标和纹理
 [渲染基础](/Notes/BaseRendering.md) 
 
+[空间变换](/Notes/Math.md) 
+
 [纹理](/Notes/Texure.md)
 
 ### 二、光照和阴影
@@ -38,5 +40,10 @@ Shader效果存放在/Assets/Shaders中
 [后处理](/Notes/PostProcessing.md)
 ### 八、ShaderToy
 [ShaderToy复现彩色渐变和火光](/Notes/ShaderToyFire.md)
-
-
+### 九、Custom GUI
+[自定义材质面板](/Notes/CustomGUI.md)
+### 十一、案例
+1. 序列动画和Billboard
+[序列动画](/Notes/Sequence.md)
+2. BuildIn 下的shadergraph：三点溶解效果
+    bridge.cs

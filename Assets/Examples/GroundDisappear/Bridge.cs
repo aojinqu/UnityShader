@@ -12,7 +12,7 @@ public class Bridge : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bridge = GameObject.Find("Bridge");
+        bridge = GameObject.Find("Bridge_BuildIn");
 
         mat = bridge.GetComponent<MeshRenderer>().sharedMaterial;
         mat.SetVectorArray("StartPosArray", StartPosArray);

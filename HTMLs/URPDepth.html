@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>URPDepth.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="urp%E4%B8%8B%E7%9A%84%E6%8A%93%E5%B1%8F">URP下的抓屏</h2>
+<p>在BuildIn下，应该使用grabpass</p>
+<p>在URP下打开Opaque Texture
+<img src="./images/URPGrab-1.png" alt="GrabTexture-1"></p>
+<pre class="hljs"><code><div>TEXTURE2D(_CameraOpaqueTexture); 
+SAMPLER(sampler_CameraOpaqueTexture); 
+
+...
+
+frag(){
+    ...
+<span class="hljs-comment">//Opaque Tex</span>
+half4 opaqueMap = SAMPLE_TEXTURE2D(_CameraOpaqueTexture, sampler_CameraOpaqueTexture, screenUV);
+<span class="hljs-keyword">return</span> <span class="hljs-number">1</span><span class="hljs-number">-0.3</span>*opaqueMap;<span class="hljs-comment">//只为了看效果使用该公式</span>
+}
+                
+</div></code></pre>
+<h3 id="%E9%99%8D%E9%87%87%E6%A0%B7">降采样</h3>
+<p><img src="./images/URPGrab-2.png" alt="GrabTexture-2"></p>
+<h2 id="%E8%83%BD%E9%87%8F%E7%BD%A9">能量罩</h2>
+<h3 id="%E4%BA%A4%E6%8E%A5%E5%A4%84%E9%AB%98%E4%BA%AE">交接处高亮</h3>
+<p>虽然我使用的深度图在frame debugger中是draw procedual，老师的则是draw dynamic，但还是可以照常使用贴图并测试</p>
+<pre class="hljs"><code><div><span class="hljs-function">half4 <span class="hljs-title">frag</span> <span class="hljs-params">(Varyings i)</span>:SV_Target
+</span>{
+    float2 screenUV = i.positionCS.xy / _ScreenParams.xy;
+    half4 depthMap = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, screenUV);
+    half depth = LinearEyeDepth(depthMap.r, _ZBufferParams);
+    <span class="hljs-keyword">return</span> depth;
+}
+</div></code></pre>
+<p>右图为反映深度图的贴图
+<img src="./images/URPGrab-3.png" alt="GrabTexture-3"></p>
+<h3 id="q1">Q1</h3>
+<p>在做深度图的时候，相机的clipping planes非常重要，因为float浮点数有精度问题，只在靠近0的时候特别精确否则会导致相机深度图全部呈现黑色
+<img src="./images/URPGrab-4.png" alt="GrabTexture-4"></p>
+<p><img src="./images/URPGrab-5.png" alt="GrabTexture-5"></p>
+<p>在 Unity（尤其是 URP）中，_CameraDepthTexture 保存的是 非线性深度值（通常在 0 到 1 之间）：
+绝大多数的“深度分辨率”集中在 摄像机近裁剪面（near plane）附近；
+<img src="./images/URPGrab-6.png" alt="GrabTexture-6"></p>
+<p>离摄像机越远，深度变化越不明显。</p>
+<p>如果你的 near plane 很小（例如 0.1）而 far plane 很大（例如 1000），那么几乎所有的像素深度值都会非常接近 1，看起来几乎全黑。</p>
+<p>举例：</p>
+<pre><code>near = 0.1  
+far  = 1000
+</code></pre>
+<p>一个距离为 1 的物体，其线性深度是 0.001，
+但经过非线性映射后，它的深度纹理值大约是 0.9；
+一个距离为 10 的物体，值大约是 0.99；
+而 100 米远的物体接近 1.0。</p>
+<p>所以只有调节,缩小 Far Clip Plane（例如从 1000 → 100），增大 Near Clip Plane（例如从 0.1 → 1），才能得到正常的<code>_CameraDepthTexture</code></p>
+<h3 id="distort%E6%89%AD%E6%9B%B2%E6%95%88%E6%9E%9C">Distort扭曲效果</h3>
+<p><code>c=frac(i.uv.y*5+_Time.y);</code></p>
+<p>作用：首先制作一个类似于sin的循环效果，我们用frac函数来实现，另外通过*5来提高这种效果，最后加上时间流动制造动态效果
+<img src="./images/URPGrab-7.png" alt="GrabTexture-7"></p>
+<h3 id="%E8%B4%B4%E8%8A%B1decal">贴花Decal</h3>
+<p><img src="./images/URPGrab-8.png" alt="GrabTexture-8"></p>
+<p>技术实现</p>
+<ul>
+<li>
+<p>选择深度值较低的点（更&quot;近&quot;的表面）</p>
+</li>
+<li>
+<p>避免贴花与场景对象穿插</p>
+</li>
+<li>
+<p>获取场景中每个像素点的世界坐标</p>
+</li>
+<li>
+<p>转换到面片模型的本地空间</p>
+</li>
+<li>
+<p>用转换后的坐标作为UV采样贴图
+实现</p>
+</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-function">half4 <span class="hljs-title">frag</span> (<span class="hljs-params">Varyings i</span>):SV_Target</span>
+{
+  half4 c;
+  float2 screenUV = i.positionCS.xy / _ScreenParams.xy;
+
+  half depthMap = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, screenUV);
+    
+  <span class="hljs-comment">//片段对应深度图中的像素在观察空间下的z值</span>
+  half depthZ = LinearEyeDepth(depthMap, _ZBufferParams);
+
+  float4 depthVS =<span class="hljs-number">1</span>;
+  depthVS.xy=i.positionVS.xy*depthZ/-i.positionVS.z;
+  depthVS.z=depthZ;
+  <span class="hljs-comment">//构建深度图上的像素在世界空间下的坐标</span>
+  float3 depthWS =mul(unity_CameraToWorld,depthVS);
+  float3 depthOS =mul(unity_WorldToObject,float4(depthWS,<span class="hljs-number">1</span>));
+  <span class="hljs-comment">//若为面片则.xy，若为方块则.xz</span>
+  float2 uv =depthOS.xz/_DecalScale+<span class="hljs-number">0.5</span>;
+
+
+  half4 mainTex=SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,uv);
+
+  c=mainTex*_Color;
+  <span class="hljs-keyword">return</span> c;
+
+            }
+</div></code></pre>
+<h3 id="q2">Q2</h3>
+<p><code>float2 uv =depthOS.xz/_DecalScale+0.5;</code>,若贴花的承载物为面片则.xy，若为方块则.xz ，这是为什么 ?</p>
+<pre><code>  1️⃣ depthOS.xy —— 沿 Z 轴方向投射
+
+  当你用 .xy 时： 意味着你用的是模型的 X 轴、Y 轴 坐标来采样贴图。
+
+  所以贴图是“贴”在 Z 轴垂直的面上。
+
+  换句话说，贴花沿着 Z 轴投射。
+
+  📘举例：
+
+  你有一面“竖直的墙”，法线方向是 Z+。
+  你想往它表面“贴”一个贴纸（Decal），那你就用 .xy。
+
+  2️⃣ depthOS.xz —— 沿 Y 轴方向投射
+
+  当你用 .xz 时： 你取的是物体坐标的 X 轴、Z 轴 分量。
+
+  所以贴图是“贴”在 Y 轴垂直的面上（也就是地面）。
+
+  换句话说，贴花沿着 Y 轴投射。
+
+  📘举例：
+
+  你要做一个“血迹”、“阴影”、“投射光斑”贴在地上，
+  通常地面是 Y=0 平面，这时你就用 .xz。
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>贴花类型</th>
+<th>推荐坐标分量</th>
+<th>投射方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>墙面贴花（如海报）</td>
+<td><code>.xy</code></td>
+<td>Z 轴方向</td>
+</tr>
+<tr>
+<td>地面贴花（如血迹、阴影）</td>
+<td><code>.xz</code></td>
+<td>Y 轴方向</td>
+</tr>
+<tr>
+<td>侧面贴花（如门边、墙角）</td>
+<td><code>.yz</code></td>
+<td>X 轴方向</td>
+</tr>
+</tbody>
+</table>
+<h3 id="q3">Q3</h3>
+<p>为什么材质上有那么多的贴图案，而非只有一个？</p>
+<p><img src="./images/URPGrab-9.png" alt="GrabTexture-9"></p>
+<p>关键在于以下代码：</p>
+<pre class="hljs"><code><div>float2 uv = depthOS.xy + <span class="hljs-number">0.5</span>;
+half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
+</div></code></pre>
+<p>把世界空间点投回物体坐标，但范围完全不确定。
+如果模型比较大，比如在世界坐标中有多个单位大小，那么 depthOS.xy 的值可能是：[-5,5]。</p>
+<p>这样采样 _MainTex 时，UV 会超出 [0,1] 区间，Unity 会自动“平铺”采样，于是图案被重复很多次。</p>
+<p>关键是将纹理的形式改为<code>clamp</code>而非<code>repeat</code></p>
+<p><img src="./images/URPGrab-10.png" alt="GrabTexture-10"></p>
+<p>为了从根本上解决这个问题，我们直接在shader中修改采样器，使得采样方式强制为clamp即可</p>
+<pre class="hljs"><code><div>            <span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> smp _linear_clamp</span>
+            SAMPLER(smp);  
+</div></code></pre>
+<h3 id="buildin-%E7%AE%A1%E7%BA%BF%E4%B8%8B%E7%9A%84%E8%B4%B4%E8%8A%B1decal">BuildIn 管线下的贴花Decal</h3>
+<p><img src="./images/URPGrab-11.png" alt="GrabTexture-11"></p>
+<p>在builIn 管线下地面会没有深度图。原因是缺少了一个ShadowCaster Pass，
+或使用Fallback &quot;Diffuse&quot;的简便方法</p>
+
+</body>
+</html>
