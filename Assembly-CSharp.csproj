@@ -118,7 +118,6 @@
     <None Include="Assets\Shaders\URP\SimplestURP.shader" />
     <None Include="Assets\ShaderToy\DefaultShaderToy.shader" />
     <None Include="Assets\Shaders\BuildIn\Globalillumination.shader" />
-    <None Include="Assets\Help\helper\Minishader.shader" />
     <None Include="Assets\Shaders\URP\Sequence.shader" />
     <None Include="Assets\Shaders\BuildIn\XRay.shader" />
     <None Include="Assets\Shaders\BuildIn\1\Pandavfx_v2.2.shader" />

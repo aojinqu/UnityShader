@@ -2,7 +2,8 @@ Shader "aj7/URP/Water"
 {
     Properties
     {
-        _Color("Color",Color)=(1,1,1,1)
+        _WaterColor01("Color01",Color)=(1,1,1,1)
+        _WaterColor02("Color02",Color)=(1,1,1,1)
         _MainTex("Main Texture",2D)="white"{}
 
     }
@@ -11,22 +12,12 @@ Shader "aj7/URP/Water"
         Tags
         {
             "RenderPipeline" = "UniversalPipeline"
-            "RenderType" = "Opaque"
-            "Queue" = "Geometry"
+            "RenderType" = "Transparent"
+            "Queue" = "Transparent"
         }
         Pass
         {
             Name "Pass"
-            Tags
-            {
-            //LightMode:<None>
-            }
-
-            //RenderState
-            Blend One Zero,One Zero
-            Cull Back 
-            ZTest LEqual
-            ZWrite On
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -43,49 +34,63 @@ Shader "aj7/URP/Water"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
-            half4 _Color;
+            half4 _WaterColor01;
+            half4 _WaterColor02;
             CBUFFER_END
 
+            TEXTURE2D(_CameraDepthTexture); 
+            SAMPLER(sampler_CameraDepthTexture);  
 
-            //#define smp sampler_MainTex
-            //#define smp _linear_clampU_mirror 
-
-            TEXTURE2D(_MainTex);    //纹理的定义，如果是编译到GLES2.0平台，则相当于sampler2D _MainTex;否则就相当于Texture2D _MainTex;
-            //SAMPLER(smp);
-            SAMPLER(sampler_MainTex);  //采样器的定义，如果是编译到GLES2.0平台，默认相当于空，否则就相当于samplerState sampler_MainTex;
+            TEXTURE2D(_MainTex);     
+            SAMPLER(sampler_MainTex);  
             float4 _MainTex_ST;
+
 
             //顶点着色器的输入（模型的数据信息）
             struct Attributes
             {
                 float3 positionOS : POSITION;
-                float2 uv : TEXCOORD;
+                float2 uv : TEXCOORD0;
             };
 
             //顶点着色器的输出
             struct Varyings
             {
                 float4 positionCS : SV_Position;
-                float2 uv : TEXCOORD;
+                float2 uv : TEXCOORD0;
+                float3 positionVS:TEXCOORD1;
             };
 
             //顶点着色器
             Varyings vert(Attributes v)
             {
                 Varyings o = (Varyings)0;
+
                 float3 positionWS = TransformObjectToWorld(v.positionOS);
-                o.positionCS = TransformWorldToHClip(positionWS);
+                o.positionVS=TransformWorldToView(positionWS);
+                o.positionCS = TransformObjectToHClip(v.positionOS.xyz);
+
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.uv = v.uv;
                 return o;
             }
             half4 frag (Varyings i):SV_Target
             {
+                //屏幕空间下的UV坐标
+                float2 screenUV = i.positionCS.xy / _ScreenParams.xy;
+
                 //水的深度
-                half4 c;
-                half4 mainTex=SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.uv);
-                c=mainTex*_Color;
-                return c;
+                half depthTex=SAMPLE_TEXTURE2D(_CameraDepthTexture,sampler_CameraDepthTexture,screenUV);
+
+                //水体对应深度图中的像素在观察空间下的z值
+                half depthScene = Linear01Depth(depthTex, _ZBufferParams);
+                half depthWater =depthScene+i.positionVS.z;
+                return depthWater;
+
+                // half4 c;
+                // half4 mainTex=SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.uv);
+                // c=mainTex*_WaterColor01;
+                // return c;
             }
             ENDHLSL
         }
