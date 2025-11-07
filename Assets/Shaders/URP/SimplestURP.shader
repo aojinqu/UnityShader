@@ -59,14 +59,14 @@ Shader "aj7/URP/SimplestUnlit"
             struct Attributes
             {
                 float3 positionOS : POSITION;
-                float2 uv : TEXCOORD;
+                float2 uv : TEXCOORD0;
             };
 
             //顶点着色器的输出
             struct Varyings
             {
                 float4 positionCS : SV_Position;
-                float2 uv : TEXCOORD;
+                float2 uv : TEXCOORD0;
             };
 
             //顶点着色器
@@ -76,7 +76,6 @@ Shader "aj7/URP/SimplestUnlit"
                 float3 positionWS = TransformObjectToWorld(v.positionOS);
                 o.positionCS = TransformWorldToHClip(positionWS);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.uv = v.uv;
                 return o;
             }
             half4 frag (Varyings i):SV_Target

@@ -29,7 +29,7 @@
     {
         Tags { "Queue"="Transparent" "RenderType" = "Transparent" "IgnoreProjector" = "True" "RenderPipeline" = "UniversalPipeline" }
         LOD 100
-
+        BLEND one one
         Pass
         {
             Name "Unlit"
@@ -61,6 +61,7 @@
                 float3 positionWS       : TEXCOORD4;
                 float3 normalWS         : TEXCOORD5;
                 float2 timeOffset       : TEXCOORD6;    //随着时间流动的速度
+
             };
 
             CBUFFER_START(UnityPerMaterial)
@@ -100,6 +101,7 @@
                 o.normalWS = TransformObjectToWorldNormal(v.normalOS);
                 o.fogCoord = ComputeFogFactor(o.positionCS.z);
 
+
                 return o;
             }
 
@@ -118,13 +120,14 @@
 
                 //屏幕空间下的UV坐标
                 float2 screenUV = i.positionCS.xy/_ScreenParams.xy;
+                //float2 screenUV = i.screenPos.xy/i.screenPos.w;
 
                 //水的深度(平静的水面)
                 half depthTex = SAMPLE_TEXTURE2D(_CameraDepthTexture,sampler_CameraDepthTexture,screenUV).r;
                 half depthScene = LinearEyeDepth(depthTex,_ZBufferParams);
                 half depthWater = depthScene + i.positionVS.z;
                 depthWater *= atten;
-                // return depthWater;
+                //return depthWater;
 
                 //法线
                 half4 normalTex01 = SAMPLE_TEXTURE2D(_NormalTex,sampler_NormalTex,i.normalUV.xy);
