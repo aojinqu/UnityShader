@@ -19,22 +19,22 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _OutlineThickness
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 75c5e9c2bdcc3bf4fb476cbbf2d98dd3, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6dce5210b3acb8c4694aee2039b8f949, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _Atten: 1
     - _Outline: 0.047
-    - _OutlineThickness: 0.039
+    - _OutlineThickness: 0.017
     m_Colors:
-    - _Color: {r: 0.78616345, g: 0.71622044, b: 0.5463588, a: 1}
-    - _OutlineColor: {r: 0.754717, g: 0.26818556, b: 0.26818556, a: 1}
+    - _Color: {r: 1, g: 0.78046703, b: 0.21226418, a: 1}
+    - _OutlineColor: {r: 0.66972905, g: 0.7075472, b: 0.130162, a: 1}
     - _WaterColor01: {r: 1, g: 1, b: 1, a: 1}
     - _WaterColor02: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

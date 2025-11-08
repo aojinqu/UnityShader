@@ -59,10 +59,18 @@ Shader "aj7/URP/Outline_2"
                 float3 positionVS : TEXCOORD1;
             };
 
+            float rand(float t)
+            {
+                // 使用时间来生成伪随机数
+                return frac(sin(t * _Time.y + 78.233) );
+            }
+            
+
             Varyings vert(Attributes v)
             {
                 Varyings o = (Varyings)0;
                 float3 normal = normalize(v.normalOS);
+                //float3 offset = rand(normal.xy) * _OutlineThickness;
                 float3 offset = normal * _OutlineThickness;
                 float4 positionOS_new = float4(v.positionOS.xyz + offset, 1.0);
 
@@ -72,6 +80,7 @@ Shader "aj7/URP/Outline_2"
 
                 return o;
             }
+
 
             half4 frag(Varyings i):SV_Target
             {
