@@ -144,6 +144,7 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Shaders\BuildIn\TexureTutorial.shader" />
     <None Include="Assets\ShaderToy\CartoonFire.shader" />
+    <None Include="Assets\Examples\outline\Outline1.shader" />
     <None Include="Assets\Shaders\BuildIn\PostProcessing\TestImageEffect.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Arts\Shaders\CGIncludes\MyGlobalIllumination.cginc" />
