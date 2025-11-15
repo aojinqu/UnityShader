@@ -15,13 +15,13 @@ Shader "aj7/URP/Outline_1"
         Tags
         {
             "RenderPipeline" = "UniversalPipeline"
-            "RenderType" = "Transparent"
-            "Queue" = "Transparent" 
+            "RenderType" = "Opaque"
+            "Queue" = "Geometry" 
         }
         Pass
         {
             Name "Pass"
-            Cull Front
+            // Cull Front
 
             HLSLPROGRAM
             #pragma vertex vert
