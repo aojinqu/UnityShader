@@ -22,7 +22,7 @@ Shader效果存放在/Assets/Shaders中
 
 ### 三、雾效
 [雾效](/Notes/Fog.md)
-### 四、PBR
+### 四、PBR+
 [PBR](/Notes/PBR.md)
 ### 五、优化
 [Shader优化](/Notes/ShaderOptimize.md)
