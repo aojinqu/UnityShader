@@ -59,7 +59,7 @@
     <UnityVersion>2022.3.29f1c1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Users\aojiaqi\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.1.3\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Users\aojiaqi\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.2.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="D:\work\UnityEditor\2022.3.29f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="D:\work\UnityEditor\2022.3.29f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -131,6 +131,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
     <None Include="Assets\Arts\Shaders\CGIncludes\MyPhysicallyBasedRendering.cginc" />
+    <None Include="Assets\Examples\emojis\Gemstone.shader" />
     <None Include="Assets\Shaders\BuildIn\heatDistort_optimize.shader" />
     <None Include="Assets\Examples\Water\original\RampTexture.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
@@ -142,6 +143,7 @@
     <None Include="Assets\Shaders\BuildIn\UIGray.shader" />
     <None Include="Assets\Shaders\BuildIn\Trees.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\Examples\emojis\Metal.shader" />
     <None Include="Assets\Shaders\BuildIn\TexureTutorial.shader" />
     <None Include="Assets\ShaderToy\CartoonFire.shader" />
     <None Include="Assets\Examples\outline\Outline1.shader" />

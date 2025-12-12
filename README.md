@@ -18,7 +18,7 @@ Shader效果存放在/Assets/Shaders中
 
 [网格阴影](/Notes/MeshShadow.md)
 
-[全局光照](/Notes/GI.md)
+[全局光照BuilIn/URP](/Notes/GI.md)
 
 ### 三、雾效
 [雾效](/Notes/Fog.md)
@@ -42,8 +42,14 @@ Shader效果存放在/Assets/Shaders中
 [ShaderToy复现彩色渐变和火光](/Notes/ShaderToyFire.md)
 ### 九、Custom GUI
 [自定义材质面板](/Notes/CustomGUI.md)
+
+[材质面板控制shader](/Notes/UGUI.md)
 ### 十一、案例
 1. 序列动画和Billboard
 [序列动画](/Notes/Sequence.md)
-2. BuildIn 下的shadergraph：三点溶解效果
+2. BuildIn 下的ShaderGraph：三点溶解效果
+
     bridge.cs
+3. [URP深度和贴花](/Notes/URPDepth.md)
+4. [URP实现水面-todo](/Notes/Water.md)
+5. [URP下的PBR实现](/Notes/Outline.md)
