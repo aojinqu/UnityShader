@@ -310,3 +310,23 @@ Shader "Custom/TransparentShader"
    Tags { "Queue"="AlphaTest" "RenderType"="TransparentCutout" }
    AlphaTest Greater 0.5
    ```
+
+## 前向渲染(ForwardBase)
+
+- **ForwardBase Pass**（`LightMode = ForwardBase`）：负责把模型画到屏幕上（采样贴图、算光照/阴影衰减、输出颜色）。
+
+
+    ForwardBase 是 Unity 前向渲染的“基础光照 Pass”。它通常会处理：
+    - 主方向光（或最重要的一盏光）
+    - 环境光/球谐光照（如果你用到）
+    - 以及把阴影结果乘到颜色上（如 `UNITY_LIGHT_ATTENUATION(atten, ...)` 得到的 atten）
+
+    简单理解：ForwardBase = 屏幕上的主渲染 Pass。
+
+
+- **ShadowCaster Pass**（`LightMode = ShadowCaster`）：负责在灯光生成阴影贴图时，把模型画进阴影图（深度图）里（输出的是深度/遮挡信息，不是颜色）。在做真实阴影时一定要有这个pass。
+
+    ShadowCaster Pass 会在渲染阴影贴图时被调用。
+    它通常只做：
+    - 根据顶点位置/法线生成“投影到光源视角下”的深度
+    - 写入阴影图（或相关缓冲）
