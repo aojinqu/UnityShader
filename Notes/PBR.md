@@ -6,7 +6,7 @@
 
 ### 反射探针采样
 
-见shader参考大全Lighting不分
+见shader参考大全Lighting部分
 ``` C
     //反射探针中当前激活的CubeMap存储在unity_SpecCube0当中，必须要用UNITY_SAMPLE_TEXCUBE进行采样，然后需要对其进行解码
     half4 cubemap_reflect = UNITY_SAMPLE_TEXCUBE (unity_SpecCube0, R);
