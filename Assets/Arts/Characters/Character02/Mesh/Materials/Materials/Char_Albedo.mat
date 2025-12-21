@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: aj7_URP_Outline
-  m_Shader: {fileID: 4800000, guid: 48267f9160a9772459764c5106a856bf, type: 3}
+  m_Name: Char_Albedo
+  m_Shader: {fileID: 4800000, guid: bfd1e59eb196e7c4eb54178fa7d7670a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -19,22 +19,19 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: _OutlineThickness
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 1bd1ec17335c743f6bb9703c0d8478ee, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Atten: 1
-    - _Outline: 0.047
-    - _OutlineThickness: 0.039
+    - _RampMax: 0.72
+    - _RampMin: 0.7
     m_Colors:
-    - _Color: {r: 0.3018868, g: 0.26340353, b: 0.16375935, a: 1}
-    - _OutlineColor: {r: 0.66972905, g: 0.7075472, b: 0.130162, a: 1}
-    - _WaterColor01: {r: 1, g: 1, b: 1, a: 1}
-    - _WaterColor02: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowTint: {r: 0.34999996, g: 0.54999995, b: 1, a: 1}
   m_BuildTextureStacks: []

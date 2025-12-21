@@ -23,7 +23,7 @@
 更直白一句：**透明水要“看得到后面的东西”，就不能占用深度**。
 
 
-```C#
+```glsl
 half depthTex=SAMPLE_TEXTURE2D(_CameraDepthTexture,sampler_CameraDepthTexture,screenUV);
 
 //水体对应深度图中的像素在观察空间下的z值
@@ -44,7 +44,7 @@ half depthWater =depthScene+i.positionVS.z;
 
 **Linear01Depth**
 
-```C#
+```glsl
 half depthScene = Linear01Depth(depthTex, _ZBufferParams);
 ```
 返回值：0-1 范围的线性深度
@@ -62,7 +62,7 @@ half depthScene = Linear01Depth(depthTex, _ZBufferParams);
 - 返回的是从相机到物体的实际距离
 - 范围取决于相机的近/远裁剪面设置
 
-```C#
+```glsl
 half depthTex = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, screenUV);
 half depthEye = LinearEyeDepth(depthTex, _ZBufferParams);
 // depthEye 范围: [Near, Far]（例如 0.1 到 1000）
@@ -80,7 +80,7 @@ half depthEye = LinearEyeDepth(depthTex, _ZBufferParams);
 
 ## 泡沫(卡通)
 
-```C#
+```glsl
 //制作一个边缘
 half foamMask =step(foamRange,foamTex);
 half4 foam = foamMask * _FoamColor;
@@ -101,13 +101,104 @@ return foam + WaterColor;
 
 
 ## 扭曲
-定义一个扰度值，控制扭曲水下的扭曲程度
-屏幕UV 和 法线纹理扭曲之间线性插值
-原理：先取一张扭曲叠图，得到扭曲uv。然后用抓屏来采样这个坐标，使得采样扭曲。
-```C#
-    half4 distortTex = SAMPLE_TEXTURE2D(_DistortTex,sampler_DistortTex,i.uv.xy);
-    float2 distortUV=lerp(screenUV,distortTex.xy,_Distort);
+目标：只让**水面下方**的画面产生折射/扰动（看起来像水在晃）。
+
+原理：先用一张噪声/扭曲贴图得到“偏移后的屏幕UV（distortUV）”，再用抓屏 `_CameraOpaqueTexture` 去采样这个 UV。为了避免水面上方也被扭曲，需要再用深度判断：若扭曲后的采样点不在水下（`depthDistortWater < 0`），就回退到原始 `screenUV`（不扭曲）。
+
+```glsl
+//得到扭曲坐标
+half4 distortTex = SAMPLE_TEXTURE2D(_DistortTex,sampler_DistortTex,i.uv.xy);
+float2 distortUV=lerp(screenUV,distortTex.xy,_Distort);
+//抓屏
+half depthDistortTex = SAMPLE_TEXTURE2D(_CameraDepthTexture,sampler_CameraDepthTexture,distortUV).r;
+half depthDistortScene = LinearEyeDepth(depthDistortTex, _ZBufferParams);
+half depthDistortWater = depthDistortScene + i.positionVS.z;
+//判断采样点样点在不在水下
+float2 opaqueUV = depthDistortWater < 0 ? screenUV : distortUV;
+half4 cameraOpaqueTex = SAMPLE_TEXTURE2D(_CameraOpaqueTexture,sampler_CameraOpaqueTexture,opaqueUV);
 ```
+
+![Water-6](./images/Water-6.gif)
+
+## 高光
+加一个Blinn-Phong，除此之外用发现贴图来制造波光粼粼的水面感。这里可以直接和扭曲贴图共用一张法线贴图。给两个Tex相反的流动方向
+
+```glsl
+
+//vert中计算得到水下扭曲纹理的流动UV
+//o.normalUV.xy=TRANSFORM_TEX(v.uv,_NormalTex)+_Time.y*_WaterSpeed*float2(1,1);
+//o.normalUV.zw=TRANSFORM_TEX(v.uv,_NormalTex)+_Time.y*_WaterSpeed*float2(-1,1);
+
+half4 normalTex1 = SAMPLE_TEXTURE2D(_NormalTex,sampler_NormalTex,i.normalUV.xy);
+half4 normalTex2 = SAMPLE_TEXTURE2D(_NormalTex,sampler_NormalTex,i.normalUV.zw);
+half4 normalTex = normalTex1*normalTex2;
+
+//2、水的高光
+//Specular=SpecularColor*Ks*pow(max(0,dot(N,H)),shineness)
+half3 N = normalize(i.normalWS);
+N=normalTex;
+//URP获取平行主灯
+Light light = GetMainLight();
+half3 L = light.direction;
+half3 V = normalize(_WorldSpaceCameraPos.xyz - i.positionWS.xyz);
+half3 H = normalize(L+V);
+half4 specular = _SpecularColor * _SpecularIntensity * pow(saturate(dot(N,H)),_SpecularSmoothness);
+```
+![Water-7](./images/Water-7.gif)
+
+
+### 反射
+
+简单，加上一个CUBEMAP，采样贴图
+
+然后给反射加上菲涅尔效应
+越垂直视线越弱，越平行实现越强
+
+![Water-9](./images/Water-9.png)
+
+加上菲涅尔后
+![Water-10](./images/Water-10.png)
+
+目前这个效果已经很不错了，可以拿来做效果
+![Water-8](./images/Water-8.gif)
+
+### 水的焦散
+利用深度贴花
+
+```glsl
+float4 depthVS=1;
+depthVS.xy=i.positionVS.xy*depthScene/-i.positionVS.z;
+depthVS.z=depthScene;
+float3 depthWS=mul(unity_CameraToWorld,depthVS).xyz;
+```
+`i.positionVS` 是水面当前像素在观察空间的位置。注意：
+- 在 Unity 观察空间里，相机朝 -Z 看，所以水面点通常 i.positionVS.z < 0。
+- `i.positionVS.xy / -i.positionVS.z` 可以理解为：这条视线方向在 VS 下的“归一化投影比例”（相当于把点投到 `z=−1` 的平面上得到的比例）。
+
+接着
+
+- 用 unity_CameraToWorld 把它变成世界坐标 depthWS
+- 再用 depthWS.xz（或 xy）当作 UV 去采样焦散贴图，让焦散“贴在水底/物体表面”上
+
+使用2张纹理来制造动态的随机性，但关键的是这里使用`causticTex=min(causticTex1,causticTex2);`,取min而不是multiply！！！！！这是一个小技巧
+```glsl
+float2 causticUV1=depthWS.xz*_CausticTex_ST.xy+_CausticSpeed*_Time.y;
+half4 causticTex1=SAMPLE_TEXTURE2D(_CausticTex,sampler_CausticTex,causticUV1);
+float2 causticUV2=depthWS.xz*_CausticTex_ST.xy+_CausticSpeed*_Time.y*float2(-1.07,1.13);
+half4 causticTex2=SAMPLE_TEXTURE2D(_CausticTex,sampler_CausticTex,causticUV2);
+//为什么用取小？
+half4 causticTex=min(causticTex1,causticTex2);
+half4 caustic=causticTex*_CausticIntensity;
+```
+效果如下：
+
+![Water-9](./images/Water-9.gif)
+
+### 整合
+
+![Water-11](./images/Water-11.png)
+
+![Water-12](./images/Water-12.gif)
 
 ## Q&A
 1. `half foamTex=SAMPLE_TEXTURE2D(_FoamTex,sampler_FoamTex,i.position.xy);`和`half foamTex=SAMPLE_TEXTURE2D(_FoamTex,sampler_FoamTex,i.uv);`的区别是什么?

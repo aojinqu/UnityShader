@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Character01
-  m_Shader: {fileID: 4800000, guid: d9ebe68b253e14437847bd5042ea01af, type: 3}
+  m_Shader: {fileID: 4800000, guid: bfd1e59eb196e7c4eb54178fa7d7670a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,6 +24,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: d636c4f5a57f26746a6b131f4ae5c090, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -89,6 +93,8 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _RampMax: 0.72
+    - _RampMin: 0.7
     - _Shadow: 0.65
     - _Shininess: 0.7
     - _SmoothnessTextureChannel: 0
@@ -101,12 +107,14 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _AddColor: {r: 0, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _Direction: {r: 0.000009179115, g: -0.000000029802322, b: 0, a: 1}
     - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MeshShadow: {r: 1, g: 1, b: 1, a: 1}
     - _Shadow: {r: 1.2, g: 0.62, b: -3.06, a: 0.93}
+    - _ShadowTint: {r: 1, g: 0.45638478, b: 0.3726415, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _color: {r: 1, g: 1, b: 1, a: 1}
