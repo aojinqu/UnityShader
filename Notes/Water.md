@@ -200,6 +200,20 @@ half4 caustic=causticTex*_CausticIntensity;
 
 ![Water-12](./images/Water-12.gif)
 
+
+### 顶点
+[使用顶点变换制作波浪](https://catlikecoding.com/unity/tutorials/flow/waves/)
+
+加上3层gestner波改变顶点着色器的效果：
+
+![Water-13](./images/Water-13.gif)
+
+
+同时添加了可以控制岸边泡沫的部分：
+![Water-14](./images/Water-14.gif)
+
+
+
 ## Q&A
 1. `half foamTex=SAMPLE_TEXTURE2D(_FoamTex,sampler_FoamTex,i.position.xy);`和`half foamTex=SAMPLE_TEXTURE2D(_FoamTex,sampler_FoamTex,i.uv);`的区别是什么?
 

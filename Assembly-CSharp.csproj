@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\MyMonsterShader.cs" />
     <Compile Include="Assets\Scripts\MyCPU.cs" />
     <Compile Include="Assets\Scripts\ShowTBN.cs" />
+    <Compile Include="Assets\Examples\Dither\OscillateAlpha.cs" />
     <Compile Include="Assets\Scripts\FunctionTest.cs" />
     <Compile Include="Assets\Examples\Shadertoy\RayMarching.cs" />
     <Compile Include="Assets\ShaderToy\ShaderToyManager.cs" />
@@ -93,9 +94,11 @@
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\Examples\Dither\DitherFunctions\Shaders\Dithered Texture Transparency.shader" />
     <None Include="Assets\Shaders\BuildIn\framework.shader" />
     <None Include="Assets\Shaders\BuildIn\NewUnlitShader.shader" />
     <None Include="Assets\Shaders\URP\Depth.shader" />
+    <None Include="Assets\Examples\Water\VertexWater.shader" />
     <None Include="Assets\Examples\Water\original\Water.shader" />
     <None Include="Assets\Examples\Ghost\Ghost.shader" />
     <None Include="Assets\Examples\Common\Checker.Shader" />
@@ -109,6 +112,7 @@
     <None Include="Assets\Examples\GroundDisappear\origin\GroundDisappear.shader" />
     <None Include="Assets\Shaders\BuildIn\Fog.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+    <None Include="Assets\Examples\Dither\DitherFunctions\Shaders\Dither Functions.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Examples\Water\Water.shader" />
     <None Include="Assets\Examples\Energy_Shield\EnergyShield.shader" />
@@ -149,6 +153,7 @@
     <None Include="Assets\Examples\emojis\Metal.shader" />
     <None Include="Assets\Shaders\BuildIn\TexureTutorial.shader" />
     <None Include="Assets\ShaderToy\CartoonFire.shader" />
+    <None Include="Assets\Examples\Dither\DitherFunctions\Shaders\Dithered Transparency.shader" />
     <None Include="Assets\Examples\outline\Outline1.shader" />
     <None Include="Assets\Examples\Water\WaterDepth.shader" />
     <None Include="Assets\Shaders\BuildIn\PostProcessing\TestImageEffect.shader" />
@@ -162,6 +167,7 @@
     <None Include="Assets\Shaders\BuildIn\outline.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Shaders\BuildIn\heatDistort.shader" />
+    <None Include="Assets\Examples\Dither\DitherFunctions\Shaders\Dithered Transparency Shadow.shader" />
     <None Include="Assets\Examples\Cartoon\Cartoon.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
   </ItemGroup>

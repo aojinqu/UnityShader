@@ -33,7 +33,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _FoamTex:
         m_Texture: {fileID: 2800000, guid: 7ac86912fc0be184fac7eeb570099f99, type: 3}
-        m_Scale: {x: 0.4, y: 0.4}
+        m_Scale: {x: 0.23, y: 0.22}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
@@ -65,21 +65,33 @@ Material:
     - _FoamNoise: 0.844
     - _FoamRange: 0.84
     - _FoamSpeed: 0.17
+    - _ShoreFoamIntensity: 1
+    - _ShoreFoamPower: 1.5
     - _SpecularDistort: 0.674
     - _SpecularIntensity: 10
     - _SpecularSmoothness: 9.94
     - _WaterSpeed: 0.138
+    - _WaveASpeed: 1.16
+    - _WaveBSpeed: 1
+    - _WaveCSpeed: 1
+    - _WaveHeight: 0.29
+    - _WaveLength: 10.29
+    - _WaveSpeed: 0.94
     m_Colors:
     - _CausticParams: {r: 0.2, g: 2.11, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DeepColor: {r: 0.26359707, g: 0.5232496, b: 0.70440245, a: 0.85}
+    - _DeepColor: {r: 0.4012103, g: 0.44859296, b: 0.61635214, a: 0.85}
     - _DistortParams: {r: 0.04, g: 0, b: 0, a: 0}
-    - _FoamColor: {r: 0.43898576, g: 0.6123665, b: 0.7798742, a: 1}
-    - _FoamParams: {r: 1.37, g: 0.15, b: 0.6, a: 0}
-    - _MainParams: {r: 1.39, g: 0.85, b: 0, a: 0}
-    - _SpecularColor: {r: 0.78616345, g: 0.20024909, b: 0.20024909, a: 1}
+    - _FoamColor: {r: 0.85004544, g: 0.8654493, b: 0.8805031, a: 1}
+    - _FoamParams: {r: 0.93, g: 0.07, b: 0.6, a: 0}
+    - _MainParams: {r: 2.17, g: 0.85, b: 0, a: 0}
+    - _ShoreFoamParams: {r: 1.3, g: 0.94, b: -0.34, a: 0.27}
+    - _SpecularColor: {r: 0.8867924, g: 0.05298428, b: 0.05298428, a: 1}
     - _SpecularParams: {r: 0.26, g: 0.66, b: 8, a: 0}
     - _SurfaceColor: {r: 1, g: 0.14779866, b: 0.14779866, a: 0.85}
     - _WaterColor01: {r: 1, g: 1, b: 1, a: 1}
     - _WaterColor02: {r: 1, g: 1, b: 1, a: 1}
+    - _WaveA: {r: 1, g: 0, b: 0.5, a: 10}
+    - _WaveB: {r: 0, g: 1, b: 0.25, a: 20}
+    - _WaveC: {r: 1, g: 1.33, b: 0.16, a: 7.61}
   m_BuildTextureStacks: []
