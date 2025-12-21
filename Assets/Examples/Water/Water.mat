@@ -70,16 +70,16 @@ Material:
     - _SpecularSmoothness: 9.94
     - _WaterSpeed: 0.138
     m_Colors:
-    - _CausticParams: {r: 0.2, g: 3.69, b: 0, a: 0}
+    - _CausticParams: {r: 0.2, g: 2.11, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DeepColor: {r: 0.41985583, g: 0.64426565, b: 0.8018868, a: 0.85}
-    - _DistortParams: {r: 0.03, g: 0, b: 0, a: 0}
-    - _FoamColor: {r: 0.6462264, g: 1, b: 0.81228805, a: 1}
-    - _FoamParams: {r: 1.18, g: 0.19, b: 0.6, a: 0}
-    - _MainParams: {r: 0.95, g: 0, b: 0, a: 0}
-    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SpecularParams: {r: 0.86, g: 0.66, b: 8, a: 0}
-    - _SurfaceColor: {r: 1, g: 0.36320752, b: 0.36320752, a: 0.85}
+    - _DeepColor: {r: 0.26359707, g: 0.5232496, b: 0.70440245, a: 0.85}
+    - _DistortParams: {r: 0.04, g: 0, b: 0, a: 0}
+    - _FoamColor: {r: 0.43898576, g: 0.6123665, b: 0.7798742, a: 1}
+    - _FoamParams: {r: 1.37, g: 0.15, b: 0.6, a: 0}
+    - _MainParams: {r: 1.39, g: 0.85, b: 0, a: 0}
+    - _SpecularColor: {r: 0.78616345, g: 0.20024909, b: 0.20024909, a: 1}
+    - _SpecularParams: {r: 0.26, g: 0.66, b: 8, a: 0}
+    - _SurfaceColor: {r: 1, g: 0.14779866, b: 0.14779866, a: 0.85}
     - _WaterColor01: {r: 1, g: 1, b: 1, a: 1}
     - _WaterColor02: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

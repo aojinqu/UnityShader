@@ -2,11 +2,10 @@ Shader "aj7/URP/Water"
 {
     Properties
     {
-        //_SurfaceColor("Surface Color (Near Surface = Darker)", Color) = (0.02, 0.18, 0.35, 0.85)
-        //_DeepColor("Deep Color (Deeper = Lighter)", Color) = (0.35, 0.65, 0.85, 0.85)
+        _SurfaceColor("Surface Color (Near Surface = Darker)", Color) = (0.02, 0.18, 0.35, 0.85)
+        _DeepColor("Deep Color (Deeper = Lighter)", Color) = (0.35, 0.65, 0.85, 0.85)
         _MainParams("Main Params (Atten, Lightness, _, _)", Vector) = (0.03, 1, 0, 0)
-        _RampTexture("Ramp Texture",2D)="white"{}
-
+        
         [Header(Foam)]
         _FoamParams("Foam Params (Range, Speed, Noise, _)", Vector) = (0.8, 0.2, 0.5, 0)
         _FoamTex("Foam Texture",2D)="white"{}
@@ -25,7 +24,7 @@ Shader "aj7/URP/Water"
 
         [Header(Caustic)]
         _CausticTex("Caustic Texture",2D)="white"{}
-        _CausticParams("Caustic Params (Speed, Intensity, _, _)", Vector) = (0.2, 3, 0, 0)
+        _CausticParams("Caustic Params (Speed, Intensity, _, _)", Vector) = (0.2, 1, 0, 0)
     }
     SubShader
     {
@@ -67,7 +66,9 @@ Shader "aj7/URP/Water"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _MainParams;     // x=Atten, y=Lightness, z=_, w=_
+                half4 _SurfaceColor;
+                half4 _DeepColor;
+                float4 _MainParams;     // x=Atten, y=_, z=_, w=_
 
                 float4 _FoamParams;     // x=FoamRange, y=WaterSpeed, z=FoamNoise
                 half4 _FoamColor;   
@@ -84,11 +85,6 @@ Shader "aj7/URP/Water"
             SAMPLER(sampler_CameraDepthTexture);  //声明深度纹理的采样器
             TEXTURE2D (_CameraOpaqueTexture); //声明不透明纹理
             SAMPLER(sampler_CameraOpaqueTexture); //声明不透明纹理的采样器
-
-            // 水体颜色渐变图（由 Assets/Examples/Water/Water.cs 生成并通过 Shader.SetGlobalTexture("_RampTexture", tex) 赋值）
-            // 纹理尺寸为 512x2：y=0（底行）为 Gradient01，y=1（顶行）为 Gradient02
-            TEXTURE2D(_RampTexture);
-            SAMPLER(sampler_RampTexture);
 
             TEXTURECUBE(_ReflectionTex); //声明反射纹理
             SAMPLER(sampler_ReflectionTex); //声明反射纹理的采样器
@@ -161,15 +157,8 @@ Shader "aj7/URP/Water"
                 half depthWater =(depthScene+i.positionVS.z)*atten;
 
                 //需求：越靠近水面颜色越深；越往下越浅
-                half tDepth = saturate(depthWater);
-                half foamRange = depthWater * _FoamParams.x;
-
-                // 基础水色：两个 Color 插值（tDepth=0 贴近水面，1 更深）
-                //half4 WaterColor = lerp(_SurfaceColor, _DeepColor, tDepth);
-
-                // Ramp 额外控制：用 0.25/0.75 取 texel center，避免双线性过滤时跨行串色
-                half4 ramp01 = SAMPLE_TEXTURE2D(_RampTexture, sampler_RampTexture, float2(tDepth, 0.25));
-                half4 ramp02 = SAMPLE_TEXTURE2D(_RampTexture, sampler_RampTexture, float2(tDepth, 0.75));
+                half foamRange =depthWater * _FoamParams.x;
+                half4 WaterColor=lerp(_SurfaceColor, _DeepColor, depthWater);
                 
                 //获取水面模型顶点在观察空间下的Z值（可以在顶点着色器中，对其直接进行转化得到顶点观察空间下的坐标）
             
@@ -239,20 +228,15 @@ Shader "aj7/URP/Water"
                 half3 reflectionUV = reflect(-V,N);
                 half4 reflectionTex = SAMPLE_TEXTURECUBE(_ReflectionTex,sampler_ReflectionTex,reflectionUV);
                 half fresnel = pow(1-saturate(dot(N,V)),3);
+                
                 reflectionTex = reflectionTex*fresnel;
 
-                half4 c = half4(0,0,0,1);  
-                // Ramp 的常见用法：ramp02 用于“染色/吸收”水下抓屏，ramp01 提供额外表层色调
+                half4 c ;  
                 half lightness = _MainParams.y;
-                c =ramp01*lightness;
-                c +=specular*reflectionTex;
-                c +=foam;
-                return c;
-                c +=reflectionTex;
-                c +=caustic;
-                // 预乘 Alpha 混合：Blend One OneMinusSrcAlpha
-                // 要求输出的 rgb 已经乘过 alpha，否则容易出现偏亮/发灰、颜色不受控等问题
-                c.a = saturate(ramp02.a);
+                c=cameraOpaqueTex*WaterColor*lightness+caustic+specular+foam+reflectionTex;
+                // 预乘 Alpha（Blend One OneMinusSrcAlpha）：rgb 必须先乘 alpha，否则容易偏亮/发灰
+                // 透明度使用 WaterColor.a（由 _SurfaceColor/_DeepColor 的 A 插值而来，材质面板可控）
+                c.a = saturate(WaterColor.a);
                 c.rgb *= c.a;
                 return c;
             }
