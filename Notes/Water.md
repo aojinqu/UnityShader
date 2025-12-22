@@ -213,6 +213,87 @@ half4 caustic=causticTex*_CausticIntensity;
 ![Water-14](./images/Water-14.gif)
 
 
+## Mesh生成WaterPool
+
+### 具体怎么做（按我这套网格脚本）
+- **1）场景准备**：新建空物体 `GridRuntime`，挂 `RuntimeWaterGridController`（可再挂 `RuntimeGridPlacementOnGUI` 用来点格子）。
+- **2）参数填写**（`RuntimeWaterGridController`）
+  - **gridOrigin**：网格左下角的世界坐标
+  - **gridSize**：列(x) / 行(z)
+  - **cellWorldSize**：每个地块的边长（米）
+  - **waterHeight**：水体高度（米）
+  - **waterTileSize**：StylisedWater 的 `TileSize`（想“一块地=一整块水面”就设为 `cellWorldSize`）
+  - **waterMaterial**：水材质（给 `MeshRenderer.sharedMaterial`）
+  - **placePrefab / placeOffset**：要生成的物体预制体与偏移（可选）
+- **3）运行交互**：
+  - 点格子选中行列 → 调 `PlaceObject(col,row)` 在该地块中心实例化物体
+  - （可选）调 `ToggleCell(col,row)` 创建/删除该格子的 `WaterVolumeBox`
+
+### 原理（为什么能“按行列生成水块/物体”）
+- **行列 → 世界坐标**：把格子当作平面网格，格子中心点：
+  - `center = gridOrigin + (col * cellWorldSize + cellWorldSize/2, 0, row * cellWorldSize + cellWorldSize/2)`
+- **生成水块（StylisedWater）**：
+  - `new GameObject` → `AddComponent<WaterVolumeBox>()`
+  - 设置 `Dimensions = (cellWorldSize, waterHeight, cellWorldSize)`、`TileSize = waterTileSize`
+  - 给 `MeshRenderer` 赋 `waterMaterial`
+  - 最后 `Rebuild()`：根据 tiles 生成网格 Mesh（顶点/三角形/UV/颜色）
+- **生成物体**：`Instantiate(placePrefab, center + placeOffset, ...)`；用字典按 cell 记录，支持重复生成时替换/清理。
+
+### C#里怎么写（最小实现思路）
+- **数据结构**：用 `Vector2Int` 表示格子坐标，用 `Dictionary<Vector2Int, T>` 记录“某格子已生成的对象”，方便切换/清理。
+- **核心代码骨架**（精简示例）：
+
+```csharp
+public Vector2Int gridSize = new(8, 8);
+public float cellWorldSize = 2f;
+public Vector3 gridOrigin;
+public Material waterMaterial;
+public float waterTileSize = 2f;
+public float waterHeight = 1f;
+public GameObject placePrefab;
+
+Dictionary<Vector2Int, Bitgem.VFX.StylisedWater.WaterVolumeBox> waters = new();
+Dictionary<Vector2Int, GameObject> placed = new();
+
+Vector3 CellCenter(Vector2Int cell)
+{
+    return gridOrigin + new Vector3(
+        cell.x * cellWorldSize + cellWorldSize * 0.5f,
+        0f,
+        cell.y * cellWorldSize + cellWorldSize * 0.5f
+    );
+}
+
+void CreateWater(Vector2Int cell)
+{
+    var go = new GameObject($"Water_{cell.x}_{cell.y}");
+    go.transform.position = CellCenter(cell);
+
+    var box = go.AddComponent<Bitgem.VFX.StylisedWater.WaterVolumeBox>();
+    box.Dimensions = new Vector3(cellWorldSize, waterHeight, cellWorldSize);
+    box.TileSize = Mathf.Max(0.1f, waterTileSize);
+
+    var mr = go.GetComponent<MeshRenderer>();
+    mr.sharedMaterial = waterMaterial;
+
+    box.Rebuild(); // 关键：生成 Mesh
+    waters[cell] = box;
+}
+
+void PlaceObject(Vector2Int cell)
+{
+    var pos = CellCenter(cell);
+    var go = Object.Instantiate(placePrefab, pos, Quaternion.identity);
+    placed[cell] = go;
+}
+```
+- **要点**：
+  - Unity 里通常把这些写在 `MonoBehaviour` 里，字段设成 `public`（或 `[SerializeField]`）便于 Inspector 配置。
+  - `Rebuild()` 代替你自己写“顶点/三角形”流程：StylisedWater 在内部把 tile 体素转成 Mesh。
+  - “格子索引越界”要先判断（`cell.x`/`cell.y` 在 `gridSize` 范围内），避免创建到不该创建的位置。
+
+![Water-13](./images/Water-13.png)
+  
 
 ## Q&A
 1. `half foamTex=SAMPLE_TEXTURE2D(_FoamTex,sampler_FoamTex,i.position.xy);`和`half foamTex=SAMPLE_TEXTURE2D(_FoamTex,sampler_FoamTex,i.uv);`的区别是什么?

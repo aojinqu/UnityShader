@@ -65,17 +65,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Examples\Ghost\GhostController.cs" />
+    <Compile Include="Assets\Examples\WaterRuntime\RuntimeWaterGridUI.cs" />
+    <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\Core\FlagEnumAttribute.cs" />
     <Compile Include="Assets\Scripts\GPUInstancing.cs" />
+    <Compile Include="Assets\Examples\WaterRuntime\RuntimeWaterGridController.cs" />
     <Compile Include="Assets\Help\mesh.cs" />
     <Compile Include="Assets\Examples\3dXray\ClippingPlane.cs" />
     <Compile Include="Assets\Scripts\MyDebug.cs" />
     <Compile Include="Assets\Scripts\MyMath.cs" />
     <Compile Include="Assets\Scripts\MonsterShaderTest.cs" />
     <Compile Include="Assets\Scripts\ShaderLOD.cs" />
+    <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeBox.cs" />
     <Compile Include="Assets\Scripts\MyFirstScript.cs" />
     <Compile Include="Assets\Examples\Water\original\WaterColor.cs" />
+    <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeHelper.cs" />
+    <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WateverVolumeFloater.cs" />
     <Compile Include="Assets\Scripts\PostProcessing.cs" />
     <Compile Include="Assets\Examples\Common\RotateSelf.cs" />
+    <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeBase.cs" />
     <Compile Include="Assets\Examples\GroundDisappear\origin\GroundDisappear.cs" />
     <Compile Include="Assets\Shaders\BuildIn\1\PandavfxGUI_V2.2.cs" />
     <Compile Include="Assets\Scripts\MyMonsterShader.cs" />
@@ -84,9 +91,11 @@
     <Compile Include="Assets\Examples\Dither\OscillateAlpha.cs" />
     <Compile Include="Assets\Scripts\FunctionTest.cs" />
     <Compile Include="Assets\Examples\Shadertoy\RayMarching.cs" />
+    <Compile Include="Assets\Examples\WaterRuntime\RuntimeGridPlacementOnGUI.cs" />
     <Compile Include="Assets\ShaderToy\ShaderToyManager.cs" />
     <Compile Include="Assets\Scripts\MyMonsterShaderTest.cs" />
     <Compile Include="Assets\Scripts\MaterialPropertyBlockTest.cs" />
+    <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeTransforms.cs" />
     <Compile Include="Assets\Help\课程\Shader\VFX2.3\PandavfxGUI23.cs" />
     <Compile Include="Assets\Examples\GroundDisappear\Bridge.cs" />
     <Compile Include="Assets\Examples\Water\Water.cs" />
